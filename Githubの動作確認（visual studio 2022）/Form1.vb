@@ -6,10 +6,13 @@
     Private Sub btnLogin_Click(sender As Object, e As EventArgs) Handles btnLogin.Click
         Dim userID As String = txtUserID.Text
         Dim password As String = txtPassword.Text
+        Dim userCheck As Boolean = authenticator.IsAuthenticated
 
-        Dim userCheck As Boolean = False
+        Dim authenticator As New clsAuthenticator
+        authenticator.Authenticate(userID, password)
+        userCheck = authenticator.IsAuthenticated
 
-        If userCheck = False Then
+        If userCheck = True Then
             MessageBox.Show("認証に成功しました。ログインします。")
         Else
             MessageBox.Show("ユーザーIDまたはパスワードに誤りがあります。")
