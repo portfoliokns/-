@@ -4,19 +4,21 @@
     End Sub
 
     Private Sub btnLogin_Click(sender As Object, e As EventArgs) Handles btnLogin.Click
+        Dim systemErrorFlag As Boolean = False
         Dim userID As String = txtUserID.Text
         Dim password As String = txtPassword.Text
-        Dim userCheck As Boolean = False
-        Try
-            Dim authenticator As New clsAuthenticator
-            authenticator.Authenticate(userID, password)
-            userCheck = authenticator.IsAuthenticated
 
-            If userCheck = True Then
+        Try
+
+            Dim authenticator As New clsAuthenticator
+            If authenticator.Authenticate(systemErrorFlag, userID, password) Then Exit Try
+
+            If authenticator.IsAuthenticated Then
                 MessageBox.Show("認証に成功しました。ログインします。")
             Else
                 MessageBox.Show("ユーザーIDまたはパスワードに誤りがあります。")
             End If
+
         Catch ex As Exception
             MessageBox.Show("エラーが発生しました： " & ex.Message)
         Finally

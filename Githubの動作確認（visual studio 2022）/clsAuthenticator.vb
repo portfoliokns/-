@@ -6,16 +6,20 @@
         End Get
     End Property
 
-    Public Sub Authenticate(ByRef userID As String, ByRef password As String)
+    Public Function Authenticate(ByRef systemErrorFlag As Boolean, ByRef userID As String, ByRef password As String) As Boolean
 
         Try
-            Dim sqlServerResponse As New clsSqlServerResponse
 
-            _isAuthenticated = True
+            Dim sqlServerResponse As New clsSqlServerRespoder
+            If sqlServerResponse.getAutenticate(systemErrorFlag, userID, password, _isAuthenticated) Then Exit Try
+
         Catch ex As Exception
+            systemErrorFlag = True
+            MessageBox.Show("エラーが発生しました： " & ex.Message)
         Finally
         End Try
 
-    End Sub
+        Return systemErrorFlag
+    End Function
 
 End Class
