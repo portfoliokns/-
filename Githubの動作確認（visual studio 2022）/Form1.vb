@@ -7,16 +7,22 @@
         Dim userID As String = txtUserID.Text
         Dim password As String = txtPassword.Text
         Dim userCheck As Boolean = False
+        Try
+            Dim authenticator As New clsAuthenticator
+            authenticator.Authenticate(userID, password)
+            userCheck = authenticator.IsAuthenticated
 
-        Dim authenticator As New clsAuthenticator
-        authenticator.Authenticate(userID, password)
-        userCheck = authenticator.IsAuthenticated
+            If userCheck = True Then
+                MessageBox.Show("認証に成功しました。ログインします。")
+            Else
+                MessageBox.Show("ユーザーIDまたはパスワードに誤りがあります。")
+            End If
+        Catch ex As Exception
+            MessageBox.Show("エラーが発生しました： " & ex.Message)
+        Finally
 
-        If userCheck = True Then
-            MessageBox.Show("認証に成功しました。ログインします。")
-        Else
-            MessageBox.Show("ユーザーIDまたはパスワードに誤りがあります。")
-        End If
+        End Try
+
 
     End Sub
 

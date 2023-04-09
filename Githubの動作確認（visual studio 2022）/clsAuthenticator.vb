@@ -7,8 +7,15 @@
     End Property
 
     Public Sub Authenticate(ByRef userID As String, ByRef password As String)
-        Dim sqlServerResponse As New clsSqlServerResponse
-        _isAuthenticated = True
+
+        Try
+            Dim sqlServerResponse As New clsSqlServerResponse
+
+            _isAuthenticated = True
+        Catch ex As Exception
+        Finally
+        End Try
+
     End Sub
 
 End Class
