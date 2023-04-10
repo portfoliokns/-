@@ -7,11 +7,17 @@ Public Class clsSqlServerRespoder
 
         Try
 
+            Dim dataSource As String = System.Environment.GetEnvironmentVariable("DEV_DATA_SOURCE")
+            Dim initialCatalog As String = System.Environment.GetEnvironmentVariable("DEV_INITIAL_CATALOG")
+            Dim sqlUserID As String = System.Environment.GetEnvironmentVariable("DEV_USER")
+            Dim sqpPass As String = System.Environment.GetEnvironmentVariable("DEV_PASSWORD")
+
             Dim connectionString As String = ""
-            connectionString = "Data Source = localhost\Dev;"
-            connectionString = "User ID = test;"
-            connectionString = "Password = test;"
-            connectionString = "Initial Catalog = test;"
+            connectionString &= String.Format("Data Source = {0};", dataSource)
+            connectionString &= String.Format("Initial Catalog = {0};", initialCatalog)
+            connectionString &= String.Format("User ID = {0};", sqlUserID)
+            connectionString &= String.Format("Password = {0};", sqpPass)
+            connectionString &= String.Format("Connect Timeout = {0};", 30)
 
             cn.ConnectionString = connectionString
             cn.Open()
