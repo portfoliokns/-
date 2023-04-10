@@ -1,6 +1,7 @@
 ﻿Public Class frmLoginScreen
     Private Sub frmLoginScreen_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
+        txtUserID.Text = "U1234567"
+        txtPassword.Text = "01234567"
     End Sub
 
     Private Sub btnLogin_Click(sender As Object, e As EventArgs) Handles btnLogin.Click

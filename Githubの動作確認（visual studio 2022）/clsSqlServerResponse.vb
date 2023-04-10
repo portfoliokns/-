@@ -22,6 +22,30 @@ Public Class clsSqlServerRespoder
             cn.ConnectionString = connectionString
             cn.Open()
 
+            Dim SQL As String = ""
+            SQL &= String.Format("SELECT COUNT(*) AS COUNT ")
+            SQL &= String.Format("FROM UserInfo  ")
+            SQL &= String.Format("WHERE user_id = '{0}' ", userID)
+            SQL &= String.Format("AND ")
+            SQL &= String.Format("password = '{0}' ", password)
+
+            Dim cd As New SqlClient.SqlCommand
+            cd.CommandText = SQL
+            cd.Connection = cn
+
+            Dim dr As SqlClient.SqlDataReader
+            dr = cd.ExecuteReader
+            Dim count As Integer
+            While dr.Read
+                count = dr("COUNT")
+            End While
+
+            If count = 1 Then
+                isAuthenticated = True
+            Else
+                isAuthenticated = False
+            End If
+
         Catch ex As Exception
             systemErrorFlag = True
             MessageBox.Show("エラーが発生しました： " & ex.Message)
