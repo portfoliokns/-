@@ -7,17 +7,18 @@ Public Class clsSqlServerRespoder
 
         Try
 
-            Dim dataSource As String = System.Environment.GetEnvironmentVariable("DEV_DATA_SOURCE")
-            Dim initialCatalog As String = System.Environment.GetEnvironmentVariable("DEV_INITIAL_CATALOG")
-            Dim sqlUserID As String = System.Environment.GetEnvironmentVariable("DEV_USER")
-            Dim sqpPass As String = System.Environment.GetEnvironmentVariable("DEV_PASSWORD")
+            Dim devDataSource As String = System.Environment.GetEnvironmentVariable("DEV_DATA_SOURCE")
+            Dim devInitialCatalog As String = System.Environment.GetEnvironmentVariable("DEV_INITIAL_CATALOG")
+            Dim devUserID As String = System.Environment.GetEnvironmentVariable("DEV_USER")
+            Dim devPassword As String = System.Environment.GetEnvironmentVariable("DEV_PASSWORD")
+            Dim devTimeout As String = System.Environment.GetEnvironmentVariable("DEV_TIMEOUT")
 
             Dim connectionString As String = ""
-            connectionString &= String.Format("Data Source = {0};", dataSource)
-            connectionString &= String.Format("Initial Catalog = {0};", initialCatalog)
-            connectionString &= String.Format("User ID = {0};", sqlUserID)
-            connectionString &= String.Format("Password = {0};", sqpPass)
-            connectionString &= String.Format("Connect Timeout = {0};", 30)
+            connectionString &= String.Format("Data Source = {0};", devDataSource)
+            connectionString &= String.Format("Initial Catalog = {0};", devInitialCatalog)
+            connectionString &= String.Format("User ID = {0};", devUserID)
+            connectionString &= String.Format("Password = {0};", devPassword)
+            connectionString &= String.Format("Connect Timeout = {0};", devTimeout)
 
             cn.ConnectionString = connectionString
             cn.Open()
