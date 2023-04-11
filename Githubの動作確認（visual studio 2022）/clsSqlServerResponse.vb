@@ -26,16 +26,16 @@ Public Class clsSqlServerRespoder
             Dim SQL As String = ""
             SQL &= String.Format("SELECT COUNT(*) AS COUNT ")
             SQL &= String.Format("FROM UserInfo  ")
-            SQL &= String.Format("WHERE user_id = '{0}' ", userID)
+            SQL &= String.Format("WHERE user_id = @userID ")
             SQL &= String.Format("AND ")
-            SQL &= String.Format("password = '{0}' ", password)
+            SQL &= String.Format("password = @password ")
 
-            Dim cd As New SqlClient.SqlCommand
-            cd.CommandText = SQL
-            cd.Connection = cn
+            Dim cd As New SqlCommand(SQL, cn)
+            cd.Parameters.AddWithValue("@userID", userID)
+            cd.Parameters.AddWithValue("@password", password)
 
-            Dim dr As SqlClient.SqlDataReader
-            dr = cd.ExecuteReader
+            Dim dr As SqlDataReader = cd.ExecuteReader
+
             Dim count As Integer
             While dr.Read
                 count = dr("COUNT")
