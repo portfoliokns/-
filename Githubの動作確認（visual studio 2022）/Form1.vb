@@ -28,6 +28,10 @@
 
             If authenticator.IsAuthenticated Then
                 MessageBox.Show("認証に成功しました。ログインします。")
+                Me.Hide()
+                Dim Main As New frmMain
+                Main.ShowDialog()
+                Me.Show()
             Else
                 MessageBox.Show("ユーザーIDまたはパスワードに誤りがあります。")
             End If
