@@ -24,11 +24,14 @@ Public Class clsSqlServerRespoder
             cn.Open()
 
             Dim SQL As String = ""
-            SQL &= String.Format("SELECT COUNT(*) AS COUNT ")
-            SQL &= String.Format("FROM UserInfo  ")
-            SQL &= String.Format("WHERE user_id = @userID ")
-            SQL &= String.Format("AND ")
-            SQL &= String.Format("password = @password ")
+            SQL &= String.Format("Select Case WHEN EXISTS ")
+            SQL &= String.Format("( ")
+            SQL &= String.Format("  SELECT 1 ")
+            SQL &= String.Format("  FROM USERINFO ")
+            SQL &= String.Format("  WHERE user_id = @userID AND password = @password ")
+            SQL &= String.Format("  HAVING COUNT(*) = 1 ")
+            SQL &= String.Format(") ")
+            SQL &= String.Format("THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS IsAuthenticated")
 
             Dim cd As New SqlCommand(SQL, cn)
             cd.Parameters.AddWithValue("@userID", userID)
@@ -36,16 +39,9 @@ Public Class clsSqlServerRespoder
 
             Dim dr As SqlDataReader = cd.ExecuteReader
 
-            Dim count As Integer
             While dr.Read
-                count = dr("COUNT")
+                isAuthenticated = dr("IsAuthenticated")
             End While
-
-            If count = 1 Then
-                isAuthenticated = True
-            Else
-                isAuthenticated = False
-            End If
 
         Catch ex As Exception
             systemErrorFlag = True
