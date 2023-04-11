@@ -33,7 +33,7 @@ Partial Class frmLoginScreen
         ' lblUserID
         ' 
         lblUserID.AutoSize = True
-        lblUserID.Location = New Point(120, 47)
+        lblUserID.Location = New Point(48, 33)
         lblUserID.Name = "lblUserID"
         lblUserID.Size = New Size(66, 15)
         lblUserID.TabIndex = 0
@@ -42,7 +42,7 @@ Partial Class frmLoginScreen
         ' lblPassword
         ' 
         lblPassword.AutoSize = True
-        lblPassword.Location = New Point(120, 104)
+        lblPassword.Location = New Point(48, 74)
         lblPassword.Name = "lblPassword"
         lblPassword.Size = New Size(63, 15)
         lblPassword.TabIndex = 1
@@ -50,21 +50,21 @@ Partial Class frmLoginScreen
         ' 
         ' txtUserID
         ' 
-        txtUserID.Location = New Point(215, 39)
+        txtUserID.Location = New Point(143, 25)
         txtUserID.Name = "txtUserID"
         txtUserID.Size = New Size(100, 23)
         txtUserID.TabIndex = 2
         ' 
         ' txtPassword
         ' 
-        txtPassword.Location = New Point(215, 101)
+        txtPassword.Location = New Point(143, 71)
         txtPassword.Name = "txtPassword"
         txtPassword.Size = New Size(100, 23)
         txtPassword.TabIndex = 3
         ' 
         ' btnLogin
         ' 
-        btnLogin.Location = New Point(109, 165)
+        btnLogin.Location = New Point(47, 123)
         btnLogin.Name = "btnLogin"
         btnLogin.Size = New Size(75, 23)
         btnLogin.TabIndex = 4
@@ -73,7 +73,7 @@ Partial Class frmLoginScreen
         ' 
         ' btnClose
         ' 
-        btnClose.Location = New Point(230, 165)
+        btnClose.Location = New Point(168, 123)
         btnClose.Name = "btnClose"
         btnClose.Size = New Size(75, 23)
         btnClose.TabIndex = 5
@@ -84,7 +84,7 @@ Partial Class frmLoginScreen
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(407, 230)
+        ClientSize = New Size(290, 178)
         Controls.Add(btnClose)
         Controls.Add(btnLogin)
         Controls.Add(txtPassword)
