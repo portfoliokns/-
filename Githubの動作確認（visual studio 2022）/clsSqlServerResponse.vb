@@ -31,7 +31,7 @@ Public Class clsSqlServerRespoder
             SQL &= String.Format("  WHERE user_id = @userID AND password = @password ")
             SQL &= String.Format("  HAVING COUNT(*) = 1 ")
             SQL &= String.Format(") ")
-            SQL &= String.Format("THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS IsAuthenticated")
+            SQL &= String.Format("THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS isAuthenticated")
 
             Dim cd As New SqlCommand(SQL, cn)
             cd.Parameters.AddWithValue("@userID", userID)
@@ -40,7 +40,7 @@ Public Class clsSqlServerRespoder
             Dim dr As SqlDataReader = cd.ExecuteReader
 
             While dr.Read
-                isAuthenticated = dr("IsAuthenticated")
+                isAuthenticated = dr("isAuthenticated")
             End While
 
         Catch ex As Exception
