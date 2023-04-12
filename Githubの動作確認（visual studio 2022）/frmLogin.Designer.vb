@@ -52,6 +52,7 @@ Partial Class frmLogin
         ' txtUserID
         ' 
         txtUserID.Location = New Point(143, 25)
+        txtUserID.MaxLength = 8
         txtUserID.Name = "txtUserID"
         txtUserID.Size = New Size(100, 23)
         txtUserID.TabIndex = 2

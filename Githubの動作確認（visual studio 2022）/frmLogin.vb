@@ -3,6 +3,7 @@
         txtUserID.Text = "U1234567"
         txtPassword.Text = "01234567"
         txtPassword.PasswordChar = "*"
+        txtUserID.MaxLength = 8
         ckbPassword.Checked = False
     End Sub
 
