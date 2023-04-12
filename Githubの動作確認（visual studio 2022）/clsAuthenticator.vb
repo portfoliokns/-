@@ -11,7 +11,7 @@
         Try
 
             Dim cryptoHasher As New clsCryptoHasher
-            If cryptoHasher.generateHash(systemErrorFlag, password) Then Exit Try
+            If cryptoHasher.calcHushPassword(systemErrorFlag, userID, password) Then Exit Try
 
             Dim sqlServerResponse As New clsSqlServerRespoder
             If sqlServerResponse.getAutenticate(systemErrorFlag, userID, password, _isAuthenticated) Then Exit Try
