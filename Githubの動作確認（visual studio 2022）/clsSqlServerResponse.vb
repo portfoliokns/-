@@ -24,7 +24,7 @@ Public Class clsSqlServerRespoder
             cn.Open()
 
             Dim SQL As String = ""
-            SQL &= String.Format("Select Case WHEN EXISTS ")
+            SQL &= String.Format("SELECT CASE WHEN EXISTS ")
             SQL &= String.Format("( ")
             SQL &= String.Format("  SELECT 1 ")
             SQL &= String.Format("  FROM USERINFO ")
