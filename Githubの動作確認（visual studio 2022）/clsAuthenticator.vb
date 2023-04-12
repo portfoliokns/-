@@ -9,12 +9,14 @@
     Public Function Authenticate(ByRef systemErrorFlag As Boolean, ByRef userID As String, ByRef password As String) As Boolean
 
         Try
-
+            'パスワードのハッシュ化
             Dim cryptoHasher As New clsCryptoHasher
             If cryptoHasher.calcHushPassword(systemErrorFlag, userID, password) Then Exit Try
+            password = cryptoHasher.getHushPassword
 
-            Dim sqlServerResponse As New clsSqlServerRespoder
-            If sqlServerResponse.getAutenticate(systemErrorFlag, userID, password, _isAuthenticated) Then Exit Try
+            'SQL接続
+            Dim sqlServerResponder As New clsSqlServerResponder
+            If sqlServerResponder.getAutenticate(systemErrorFlag, userID, password, _isAuthenticated) Then Exit Try
 
         Catch ex As Exception
             systemErrorFlag = True

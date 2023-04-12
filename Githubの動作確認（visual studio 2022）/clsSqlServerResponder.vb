@@ -1,6 +1,6 @@
 ﻿Imports System.Data.SqlClient
 
-Public Class clsSqlServerRespoder
+Public Class clsSqlServerResponder
 
     Public Function getAutenticate(ByRef systemErrorFlag As Boolean, ByRef userID As String, ByRef password As String, ByRef isAuthenticated As Boolean) As Boolean
         Dim cn As New SqlClient.SqlConnection

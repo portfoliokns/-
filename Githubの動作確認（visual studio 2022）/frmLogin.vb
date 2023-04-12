@@ -33,7 +33,7 @@
         Dim password As String = txtPassword.Text
 
         Try
-
+            '認証処理
             Dim authenticator As New clsAuthenticator
             If authenticator.Authenticate(systemErrorFlag, userID, password) Then Exit Try
 

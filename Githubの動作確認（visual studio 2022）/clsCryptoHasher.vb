@@ -1,10 +1,10 @@
 ﻿Imports System.Security.Cryptography
 
 Public Class clsCryptoHasher
-    Private _changedPassword As String
-    Public ReadOnly Property ChangePassword() As String
+    Private _getHushPassword As String
+    Public ReadOnly Property getHushPassword() As String
         Get
-            Return _changedPassword
+            Return _getHushPassword
         End Get
     End Property
     Private saltSeed As String = System.Environment.GetEnvironmentVariable("DEV_SALT_SEED")
@@ -14,14 +14,14 @@ Public Class clsCryptoHasher
 
         Try
             'ソルト化
-            Dim saltUserID As String = userID
-            password = String.Concat(password, saltUserID, saltSeed)
+            Dim saltPassword As String = String.Concat(userID, password, saltSeed)
 
             'ストレッチング
             For stretching = 1 To stretchingTimes
                 'ハッシュ化
-                If Me.generateHash(systemErrorFlag, password) Then Exit Try
+                If Me.generateHash(systemErrorFlag, saltPassword) Then Exit Try
             Next
+            _getHushPassword = saltPassword
 
         Catch ex As Exception
             systemErrorFlag = True
