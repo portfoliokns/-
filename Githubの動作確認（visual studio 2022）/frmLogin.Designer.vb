@@ -28,6 +28,7 @@ Partial Class frmLogin
         txtPassword = New TextBox()
         btnLogin = New Button()
         btnClose = New Button()
+        ckbPassword = New CheckBox()
         SuspendLayout()
         ' 
         ' lblUserID
@@ -59,12 +60,13 @@ Partial Class frmLogin
         ' 
         txtPassword.Location = New Point(143, 71)
         txtPassword.Name = "txtPassword"
+        txtPassword.PasswordChar = "*"c
         txtPassword.Size = New Size(100, 23)
         txtPassword.TabIndex = 3
         ' 
         ' btnLogin
         ' 
-        btnLogin.Location = New Point(47, 123)
+        btnLogin.Location = New Point(47, 141)
         btnLogin.Name = "btnLogin"
         btnLogin.Size = New Size(75, 23)
         btnLogin.TabIndex = 4
@@ -73,25 +75,36 @@ Partial Class frmLogin
         ' 
         ' btnClose
         ' 
-        btnClose.Location = New Point(168, 123)
+        btnClose.Location = New Point(168, 141)
         btnClose.Name = "btnClose"
         btnClose.Size = New Size(75, 23)
         btnClose.TabIndex = 5
         btnClose.Text = "閉じる"
         btnClose.UseVisualStyleBackColor = True
         ' 
-        ' frmLoginScreen
+        ' ckbPassword
+        ' 
+        ckbPassword.AutoSize = True
+        ckbPassword.Location = New Point(100, 110)
+        ckbPassword.Name = "ckbPassword"
+        ckbPassword.Size = New Size(103, 19)
+        ckbPassword.TabIndex = 6
+        ckbPassword.Text = "パスワードを表示"
+        ckbPassword.UseVisualStyleBackColor = True
+        ' 
+        ' frmLogin
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(290, 178)
+        Controls.Add(ckbPassword)
         Controls.Add(btnClose)
         Controls.Add(btnLogin)
         Controls.Add(txtPassword)
         Controls.Add(txtUserID)
         Controls.Add(lblPassword)
         Controls.Add(lblUserID)
-        Name = "frmLoginScreen"
+        Name = "frmLogin"
         Text = "ログイン"
         ResumeLayout(False)
         PerformLayout()
@@ -103,4 +116,5 @@ Partial Class frmLogin
     Friend WithEvents txtPassword As TextBox
     Friend WithEvents btnLogin As Button
     Friend WithEvents btnClose As Button
+    Friend WithEvents ckbPassword As CheckBox
 End Class
