@@ -28,12 +28,15 @@ Partial Class frmAddAccount
         txtPassword = New TextBox()
         btnAdd = New Button()
         btnClose = New Button()
+        txtRePassword = New TextBox()
+        lblRePassword = New Label()
+        ckbPassword = New CheckBox()
         SuspendLayout()
         ' 
         ' lblUserID
         ' 
         lblUserID.AutoSize = True
-        lblUserID.Location = New Point(37, 40)
+        lblUserID.Location = New Point(34, 37)
         lblUserID.Name = "lblUserID"
         lblUserID.Size = New Size(66, 15)
         lblUserID.TabIndex = 0
@@ -42,7 +45,7 @@ Partial Class frmAddAccount
         ' lblPassword
         ' 
         lblPassword.AutoSize = True
-        lblPassword.Location = New Point(37, 90)
+        lblPassword.Location = New Point(34, 87)
         lblPassword.Name = "lblPassword"
         lblPassword.Size = New Size(63, 15)
         lblPassword.TabIndex = 1
@@ -50,42 +53,73 @@ Partial Class frmAddAccount
         ' 
         ' txtUserID
         ' 
-        txtUserID.Location = New Point(119, 37)
+        txtUserID.Location = New Point(122, 34)
         txtUserID.MaxLength = 8
         txtUserID.Name = "txtUserID"
         txtUserID.Size = New Size(100, 23)
-        txtUserID.TabIndex = 2
+        txtUserID.TabIndex = 3
         ' 
         ' txtPassword
         ' 
-        txtPassword.Location = New Point(119, 87)
+        txtPassword.Location = New Point(122, 84)
         txtPassword.Name = "txtPassword"
+        txtPassword.PasswordChar = "*"c
         txtPassword.Size = New Size(100, 23)
-        txtPassword.TabIndex = 3
+        txtPassword.TabIndex = 4
         ' 
         ' btnAdd
         ' 
-        btnAdd.Location = New Point(34, 139)
+        btnAdd.Location = New Point(41, 216)
         btnAdd.Name = "btnAdd"
         btnAdd.Size = New Size(75, 23)
-        btnAdd.TabIndex = 4
+        btnAdd.TabIndex = 7
         btnAdd.Text = "登録"
         btnAdd.UseVisualStyleBackColor = True
         ' 
         ' btnClose
         ' 
-        btnClose.Location = New Point(141, 139)
+        btnClose.Location = New Point(141, 216)
         btnClose.Name = "btnClose"
         btnClose.Size = New Size(75, 23)
-        btnClose.TabIndex = 5
+        btnClose.TabIndex = 8
         btnClose.Text = "閉じる"
         btnClose.UseVisualStyleBackColor = True
+        ' 
+        ' txtRePassword
+        ' 
+        txtRePassword.Location = New Point(122, 131)
+        txtRePassword.Name = "txtRePassword"
+        txtRePassword.PasswordChar = "*"c
+        txtRePassword.Size = New Size(100, 23)
+        txtRePassword.TabIndex = 5
+        ' 
+        ' lblRePassword
+        ' 
+        lblRePassword.AutoSize = True
+        lblRePassword.Location = New Point(34, 134)
+        lblRePassword.Name = "lblRePassword"
+        lblRePassword.Size = New Size(83, 15)
+        lblRePassword.TabIndex = 2
+        lblRePassword.Text = "パスワード(再)："
+        ' 
+        ' ckbPassword
+        ' 
+        ckbPassword.AutoSize = True
+        ckbPassword.Location = New Point(85, 176)
+        ckbPassword.Name = "ckbPassword"
+        ckbPassword.Size = New Size(103, 19)
+        ckbPassword.TabIndex = 6
+        ckbPassword.Text = "パスワードを表示"
+        ckbPassword.UseVisualStyleBackColor = True
         ' 
         ' frmAddAccount
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(256, 193)
+        ClientSize = New Size(256, 267)
+        Controls.Add(ckbPassword)
+        Controls.Add(txtRePassword)
+        Controls.Add(lblRePassword)
         Controls.Add(btnClose)
         Controls.Add(btnAdd)
         Controls.Add(txtPassword)
@@ -104,4 +138,7 @@ Partial Class frmAddAccount
     Friend WithEvents txtPassword As TextBox
     Friend WithEvents btnAdd As Button
     Friend WithEvents btnClose As Button
+    Friend WithEvents txtRePassword As TextBox
+    Friend WithEvents lblRePassword As Label
+    Friend WithEvents ckbPassword As CheckBox
 End Class
