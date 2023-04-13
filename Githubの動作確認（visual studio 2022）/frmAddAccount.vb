@@ -52,11 +52,13 @@
             txtPassword.PasswordChar = ""
             lblRePassword.Visible = False
             txtRePassword.Visible = False
+            btnAdd.Enabled = False
         Else
             txtPassword.PasswordChar = "*"
             lblRePassword.Visible = True
             txtRePassword.Visible = True
             txtRePassword.Text = ""
+            btnAdd.Enabled = True
         End If
     End Sub
 
@@ -72,9 +74,24 @@
         Dim rePassword As String = txtRePassword.Text
 
         Try
+            '入力済チェック
+
+
             'パスワードの一致確認
-            Dim passwordCheck As String
-            If checkPasswordMatch(systemErrorFlag, password, rePassword, passwordCheck) Then Exit Try
+            Dim matchCheck As Boolean
+            If checkPasswordMatch(systemErrorFlag, password, rePassword, matchCheck) Then Exit Try
+            If Not matchCheck Then
+                MessageBox.Show("パスワードが一致しません。もう一度入力しなおしてください。")
+                txtPassword.Focus()
+                Exit Try
+            End If
+
+            'パスワード登録状況を確認
+
+
+
+            'SQLServer側に登録
+
 
         Catch ex As Exception
             MessageBox.Show("エラーが発生しました： " & ex.Message)
