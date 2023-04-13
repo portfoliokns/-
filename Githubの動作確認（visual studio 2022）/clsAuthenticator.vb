@@ -25,8 +25,8 @@ Public Class clsAuthenticator
             password = cryptoHasher.getHushPassword
 
             'SQL接続
-            Dim sqlServerResponder As New clsSqlServerConnector
-            If sqlServerResponder.getAuthentication(systemErrorFlag, userID, password, _isAuthenticated) Then Exit Try
+            Dim sqlServerConnector As New clsSqlServerConnector
+            If sqlServerConnector.getAuthentication(systemErrorFlag, userID, password, _isAuthenticated) Then Exit Try
 
         Catch ex As Exception
             systemErrorFlag = True

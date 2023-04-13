@@ -22,15 +22,40 @@ Partial Class frmMain
     'コード エディターを使って変更しないでください。
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        btnAddAccount = New Button()
+        btnLogout = New Button()
         SuspendLayout()
+        ' 
+        ' btnAddAccount
+        ' 
+        btnAddAccount.Location = New Point(187, 12)
+        btnAddAccount.Name = "btnAddAccount"
+        btnAddAccount.Size = New Size(87, 23)
+        btnAddAccount.TabIndex = 0
+        btnAddAccount.Text = "アカウント登録"
+        btnAddAccount.UseVisualStyleBackColor = True
+        ' 
+        ' btnLogout
+        ' 
+        btnLogout.Location = New Point(280, 12)
+        btnLogout.Name = "btnLogout"
+        btnLogout.Size = New Size(87, 23)
+        btnLogout.TabIndex = 1
+        btnLogout.Text = "ログアウト"
+        btnLogout.UseVisualStyleBackColor = True
         ' 
         ' frmMain
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(800, 450)
+        ClientSize = New Size(377, 450)
+        Controls.Add(btnLogout)
+        Controls.Add(btnAddAccount)
         Name = "frmMain"
         Text = "ログイン成功"
         ResumeLayout(False)
     End Sub
+
+    Friend WithEvents btnAddAccount As Button
+    Friend WithEvents btnLogout As Button
 End Class
