@@ -6,7 +6,7 @@
 Public Class clsSqlServerConnector
 
     ''' <summary>
-    ''' 認証結果を取得する
+    ''' 認証結果を問い合わせる
     ''' </summary>
     ''' <param name="systemErrorFlag">システムエラーフラグ</param>
     ''' <param name="userID">ユーザーID</param>
@@ -66,7 +66,7 @@ Public Class clsSqlServerConnector
     End Function
 
     ''' <summary>
-    ''' ユーザーIDの登録状況を確認する
+    ''' ユーザーIDの登録状況を問い合わせる
     ''' </summary>
     ''' <param name="systemErrorFlag">システムエラーフラグ</param>
     ''' <param name="userID">ユーザーID</param>
@@ -111,6 +111,72 @@ Public Class clsSqlServerConnector
             While dr.Read
                 isExist = dr("isExist")
             End While
+
+        Catch ex As Exception
+            systemErrorFlag = True
+            MessageBox.Show("エラーが発生しました： " & ex.Message)
+        Finally
+            cn.Close()
+            cn.Dispose()
+        End Try
+
+        Return systemErrorFlag
+    End Function
+
+    ''' <summary>
+    ''' ユーザー情報を登録する
+    ''' </summary>
+    ''' <param name="systemErrorFlag"></param>
+    ''' <param name="userID"></param>
+    ''' <param name="isExist"></param>
+    ''' <returns></returns>
+    Public Function insertUserInfo(ByRef systemErrorFlag As Boolean, ByRef userID As String, ByRef password As String) As Boolean
+        Dim cn As New SqlClient.SqlConnection
+        Dim SQL As String = ""
+        Dim maxID As Integer
+
+        Try
+
+            Dim devDataSource As String = System.Environment.GetEnvironmentVariable("DEV_DATA_SOURCE")
+            Dim devInitialCatalog As String = System.Environment.GetEnvironmentVariable("DEV_INITIAL_CATALOG")
+            Dim devUserID As String = System.Environment.GetEnvironmentVariable("DEV_USER")
+            Dim devPassword As String = System.Environment.GetEnvironmentVariable("DEV_PASSWORD")
+            Dim devTimeout As String = System.Environment.GetEnvironmentVariable("DEV_TIMEOUT")
+
+            Dim connectionString As String = ""
+            connectionString &= String.Format("Data Source = {0};", devDataSource)
+            connectionString &= String.Format("Initial Catalog = {0};", devInitialCatalog)
+            connectionString &= String.Format("User ID = {0};", devUserID)
+            connectionString &= String.Format("Password = {0};", devPassword)
+            connectionString &= String.Format("Connect Timeout = {0};", devTimeout)
+            cn.ConnectionString = connectionString
+
+            cn.Open()
+
+            SQL = ""
+            SQL &= String.Format("SELECT MAX(id) AS maxID ")
+            SQL &= String.Format("FROM UserInfo; ")
+
+            Dim cdSelect As New SqlCommand(SQL, cn)
+            Dim dr As SqlDataReader = cdSelect.ExecuteReader
+
+            While dr.Read
+                maxID = dr("maxID")
+            End While
+
+            cn.Close()
+
+            cn.Open()
+
+            SQL = ""
+            SQL &= String.Format("INSERT INTO UserInfo (id, user_id, password) ")
+            SQL &= String.Format("VALUES (@id, @userID, @password); ")
+
+            Dim cdInsert As New SqlCommand(SQL, cn)
+            cdInsert.Parameters.AddWithValue("@id", maxID + 1)
+            cdInsert.Parameters.AddWithValue("@userID", userID)
+            cdInsert.Parameters.AddWithValue("@password", password)
+            cdInsert.ExecuteNonQuery()
 
         Catch ex As Exception
             systemErrorFlag = True

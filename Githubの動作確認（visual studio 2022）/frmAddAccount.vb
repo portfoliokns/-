@@ -93,9 +93,9 @@
             End If
 
             'ユーザーIDの登録状況を確認
-            Dim sqlServerConnector As New clsSqlServerConnector
+            Dim UserInfo As New clsUserInfo
             Dim userExist As Boolean
-            If sqlServerConnector.checkUserExist(systemErrorFlag, userID, userExist) Then Exit Try
+            If UserInfo.checkUserExist(systemErrorFlag, userID, userExist) Then Exit Try
             If userExist Then
                 MessageBox.Show("ユーザーIDがすでに登録されています。")
                 txtUserID.Focus()
@@ -103,6 +103,9 @@
             End If
 
             'SQLServer側に登録
+            If UserInfo.createUserInfo(systemErrorFlag, userID, password) Then Exit Try
+            MessageBox.Show("アカウントが作成されました。")
+            Me.Close()
 
 
         Catch ex As Exception
