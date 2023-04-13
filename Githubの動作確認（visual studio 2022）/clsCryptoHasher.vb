@@ -1,5 +1,8 @@
 ﻿Imports System.Security.Cryptography
 
+''' <summary>
+''' ハッシュ化装置
+''' </summary>
 Public Class clsCryptoHasher
     Private _getHushPassword As String
     Public ReadOnly Property getHushPassword() As String
@@ -10,6 +13,13 @@ Public Class clsCryptoHasher
     Private saltSeed As String = System.Environment.GetEnvironmentVariable("DEV_SALT_SEED")
     Private stretchingTimes As Integer = System.Environment.GetEnvironmentVariable("DEV_STRETCHING_TIMES")
 
+    ''' <summary>
+    ''' ハッシュ化を計算する
+    ''' </summary>
+    ''' <param name="systemErrorFlag">システムエラーフラグ</param>
+    ''' <param name="userID">ユーザーID</param>
+    ''' <param name="password">パスワード</param>
+    ''' <returns>システムエラーフラグ</returns>
     Public Function calcHushPassword(ByRef systemErrorFlag As Boolean, ByRef userID As String, ByRef password As String) As Boolean
 
         Try
@@ -33,7 +43,12 @@ Public Class clsCryptoHasher
     End Function
 
 
-
+    ''' <summary>
+    ''' ハッシュ化する
+    ''' </summary>
+    ''' <param name="systemErrorFlag">システムエラーフラグ</param>
+    ''' <param name="password">パスワード</param>
+    ''' <returns>システムエラーフラグ</returns>
     Private Function generateHash(ByRef systemErrorFlag As Boolean, ByRef password As String) As Boolean
 
         Try

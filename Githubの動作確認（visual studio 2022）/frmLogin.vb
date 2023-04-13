@@ -1,4 +1,9 @@
 ﻿Public Class frmLogin
+    ''' <summary>
+    ''' フォームの初期化
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
     Private Sub frmLoginScreen_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         txtUserID.Text = "U1234567"
         txtPassword.Text = "01234567"
@@ -7,18 +12,33 @@
         ckbPassword.Checked = False
     End Sub
 
+    ''' <summary>
+    ''' ユーザーIDのテキストフォーム、キーを押した後の処理
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
     Private Sub txtUserID_KeyDown(sender As Object, e As KeyEventArgs) Handles txtUserID.KeyDown
         If e.KeyCode = Keys.Enter Then
             btnLogin.PerformClick()
         End If
     End Sub
 
+    ''' <summary>
+    ''' パスワードのテキストフォーム、キーを押した後の処理
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
     Private Sub txtPassword_KeyDown(sender As Object, e As KeyEventArgs) Handles txtPassword.KeyDown
         If e.KeyCode = Keys.Enter Then
             btnLogin.PerformClick()
         End If
     End Sub
 
+    ''' <summary>
+    ''' チェックボックス、チェック時の処理
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
     Private Sub ckbPassword_CheckedChanged(sender As Object, e As EventArgs) Handles ckbPassword.CheckedChanged
         If ckbPassword.Checked Then
             txtPassword.PasswordChar = ""
@@ -27,6 +47,11 @@
         End If
     End Sub
 
+    ''' <summary>
+    ''' ログインボタン、クリック時の処理
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
     Private Sub btnLogin_Click(sender As Object, e As EventArgs) Handles btnLogin.Click
         Dim systemErrorFlag As Boolean = False
         Dim userID As String = txtUserID.Text
@@ -56,6 +81,11 @@
 
     End Sub
 
+    ''' <summary>
+    ''' 閉じるボタン、クリック時の処理
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
     Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
         Application.Exit()
     End Sub
