@@ -1,4 +1,7 @@
-﻿Public Class clsAuthenticator
+﻿''' <summary>
+''' 認証基盤
+''' </summary>
+Public Class clsAuthenticator
     Private _isAuthenticated As Boolean = False
     Public ReadOnly Property IsAuthenticated() As Boolean
         Get
@@ -6,6 +9,13 @@
         End Get
     End Property
 
+    ''' <summary>
+    ''' 認証処理をする
+    ''' </summary>
+    ''' <param name="systemErrorFlag">システムエラーフラグ</param>
+    ''' <param name="userID">ユーザーID</param>
+    ''' <param name="password">パスワード</param>
+    ''' <returns>システムエラーフラグ</returns>
     Public Function Authenticate(ByRef systemErrorFlag As Boolean, ByRef userID As String, ByRef password As String) As Boolean
 
         Try
