@@ -34,18 +34,18 @@ Public Class clsCryptoHasher
 
 
 
-    Private Function generateHash(ByRef systemErrorFlag As Boolean, ByRef result As String) As Boolean
+    Private Function generateHash(ByRef systemErrorFlag As Boolean, ByRef password As String) As Boolean
 
         Try
             'パスワードをバイト配列に変換する
-            Dim Bytes() As Byte = System.Text.Encoding.UTF8.GetBytes(result)
+            Dim Bytes() As Byte = System.Text.Encoding.UTF8.GetBytes(password)
 
             'SHA256ハッシュアルゴリズムを使用してハッシュ値を計算する
             Dim sha256 As SHA256 = SHA256.Create()
             Dim hashBytes() As Byte = sha256.ComputeHash(Bytes)
 
             'ハッシュ値をBase64文字列に変換する
-            result = Convert.ToBase64String(hashBytes)
+            password = Convert.ToBase64String(hashBytes)
 
         Catch ex As Exception
             systemErrorFlag = True
