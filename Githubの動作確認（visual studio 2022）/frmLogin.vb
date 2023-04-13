@@ -2,6 +2,9 @@
     Private Sub frmLoginScreen_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         txtUserID.Text = "U1234567"
         txtPassword.Text = "01234567"
+        txtPassword.PasswordChar = "*"
+        txtUserID.MaxLength = 8
+        ckbPassword.Checked = False
     End Sub
 
     Private Sub txtUserID_KeyDown(sender As Object, e As KeyEventArgs) Handles txtUserID.KeyDown
@@ -16,13 +19,21 @@
         End If
     End Sub
 
+    Private Sub ckbPassword_CheckedChanged(sender As Object, e As EventArgs) Handles ckbPassword.CheckedChanged
+        If ckbPassword.Checked Then
+            txtPassword.PasswordChar = ""
+        Else
+            txtPassword.PasswordChar = "*"
+        End If
+    End Sub
+
     Private Sub btnLogin_Click(sender As Object, e As EventArgs) Handles btnLogin.Click
         Dim systemErrorFlag As Boolean = False
         Dim userID As String = txtUserID.Text
         Dim password As String = txtPassword.Text
 
         Try
-
+            '認証処理
             Dim authenticator As New clsAuthenticator
             If authenticator.Authenticate(systemErrorFlag, userID, password) Then Exit Try
 
@@ -32,6 +43,7 @@
                 Dim Main As New frmMain
                 Main.ShowDialog()
                 Me.Show()
+                Me.OnLoad(e)
             Else
                 MessageBox.Show("ユーザーIDまたはパスワードに誤りがあります。")
             End If
