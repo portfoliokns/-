@@ -69,13 +69,19 @@
     ''' <param name="e"></param>
     Private Sub btnAdd_Click(sender As Object, e As EventArgs) Handles btnAdd.Click
         Dim systemErrorFlag As Boolean = False
-        Dim userId As String = txtUserID.Text
+        Dim userID As String = txtUserID.Text
         Dim password As String = txtPassword.Text
         Dim rePassword As String = txtRePassword.Text
 
         Try
             '入力済チェック
-
+            Dim emptyCheck As Boolean
+            If checkEmpty(systemErrorFlag, userID, password, rePassword, emptyCheck) Then Exit Try
+            If Not emptyCheck Then
+                MessageBox.Show("ユーザーID、パスワード、パスワード（再）は必ず入力してください。")
+                txtUserID.Focus()
+                Exit Try
+            End If
 
             'パスワードの一致確認
             Dim matchCheck As Boolean
@@ -111,13 +117,39 @@
     End Sub
 
     ''' <summary>
+    ''' テキストフォーム空入力のチェック
+    ''' </summary>
+    ''' <param name="systemErrorflag"></param>
+    ''' <param name="userID">ユーザーID</param>
+    ''' <param name="password">パスワード</param>
+    ''' <param name="rePassword">パスワード（再）</param>
+    ''' <param name="checkResult">チェックの結果</param>
+    ''' <returns>システムエラーフラグ</returns>
+    Private Function checkEmpty(ByRef systemErrorflag As Boolean, ByRef userID As String, ByRef password As String, ByRef rePassword As String, ByRef checkResult As Boolean)
+        checkResult = False
+        Try
+
+            If Not String.IsNullOrEmpty(userID) AndAlso Not String.IsNullOrEmpty(password) AndAlso Not String.IsNullOrEmpty(rePassword) Then checkResult = True
+
+        Catch ex As Exception
+            systemErrorflag = True
+            MessageBox.Show("エラーが発生しました： " & ex.Message)
+        Finally
+        End Try
+
+        Return systemErrorflag
+    End Function
+
+
+
+    ''' <summary>
     ''' パスワードの重複チェック
     ''' </summary>
     ''' <param name="systemErrorflag">システムエラーフラグ</param>
     ''' <param name="password">パスワード</param>
     ''' <param name="rePassword">パスワード（再）</param>
     ''' <param name="checkResult">チェックの結果</param>
-    ''' <returns></returns>
+    ''' <returns>システムエラーフラグ</returns>
     Private Function checkPasswordMatch(ByRef systemErrorflag As Boolean, ByRef password As String, ByRef rePassword As String, ByRef checkResult As Boolean)
         checkResult = False
         Try
