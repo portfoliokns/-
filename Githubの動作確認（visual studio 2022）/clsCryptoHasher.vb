@@ -14,7 +14,7 @@ Public Class clsCryptoHasher
     Private stretchingTimes As Integer = System.Environment.GetEnvironmentVariable("DEV_STRETCHING_TIMES")
 
     ''' <summary>
-    ''' パスワードをハッシュ化する
+    ''' ハッシュ化を計算する
     ''' </summary>
     ''' <param name="systemErrorFlag">システムエラーフラグ</param>
     ''' <param name="userID">ユーザーID</param>

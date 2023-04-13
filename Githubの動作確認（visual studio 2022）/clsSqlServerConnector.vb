@@ -1,9 +1,9 @@
 ﻿Imports System.Data.SqlClient
 
 ''' <summary>
-''' SQLServer対応機器
+''' SQLServer接続基盤
 ''' </summary>
-Public Class clsSqlServerResponder
+Public Class clsSqlServerConnector
 
     ''' <summary>
     ''' 認証結果を取得する
@@ -13,7 +13,7 @@ Public Class clsSqlServerResponder
     ''' <param name="password">パスワード</param>
     ''' <param name="isAuthenticated">認証結果</param>
     ''' <returns>システムエラーフラグ</returns>
-    Public Function getAutenticate(ByRef systemErrorFlag As Boolean, ByRef userID As String, ByRef password As String, ByRef isAuthenticated As Boolean) As Boolean
+    Public Function getAuthentication(ByRef systemErrorFlag As Boolean, ByRef userID As String, ByRef password As String, ByRef isAuthenticated As Boolean) As Boolean
         Dim cn As New SqlClient.SqlConnection
 
         Try
