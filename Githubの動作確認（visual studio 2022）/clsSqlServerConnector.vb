@@ -4,7 +4,7 @@
 ''' SQLServer接続基盤
 ''' </summary>
 Public Class clsSqlServerConnector
-
+    Private connectionString As String
     ''' <summary>
     ''' 認証結果を問い合わせる
     ''' </summary>
@@ -18,19 +18,7 @@ Public Class clsSqlServerConnector
 
         Try
 
-            Dim devDataSource As String = System.Environment.GetEnvironmentVariable("DEV_DATA_SOURCE")
-            Dim devInitialCatalog As String = System.Environment.GetEnvironmentVariable("DEV_INITIAL_CATALOG")
-            Dim devUserID As String = System.Environment.GetEnvironmentVariable("DEV_USER")
-            Dim devPassword As String = System.Environment.GetEnvironmentVariable("DEV_PASSWORD")
-            Dim devTimeout As String = System.Environment.GetEnvironmentVariable("DEV_TIMEOUT")
-
-            Dim connectionString As String = ""
-            connectionString &= String.Format("Data Source = {0};", devDataSource)
-            connectionString &= String.Format("Initial Catalog = {0};", devInitialCatalog)
-            connectionString &= String.Format("User ID = {0};", devUserID)
-            connectionString &= String.Format("Password = {0};", devPassword)
-            connectionString &= String.Format("Connect Timeout = {0};", devTimeout)
-
+            If getConnection(systemErrorFlag, connectionString) Then Exit Try
             cn.ConnectionString = connectionString
             cn.Open()
 
@@ -77,19 +65,7 @@ Public Class clsSqlServerConnector
 
         Try
 
-            Dim devDataSource As String = System.Environment.GetEnvironmentVariable("DEV_DATA_SOURCE")
-            Dim devInitialCatalog As String = System.Environment.GetEnvironmentVariable("DEV_INITIAL_CATALOG")
-            Dim devUserID As String = System.Environment.GetEnvironmentVariable("DEV_USER")
-            Dim devPassword As String = System.Environment.GetEnvironmentVariable("DEV_PASSWORD")
-            Dim devTimeout As String = System.Environment.GetEnvironmentVariable("DEV_TIMEOUT")
-
-            Dim connectionString As String = ""
-            connectionString &= String.Format("Data Source = {0};", devDataSource)
-            connectionString &= String.Format("Initial Catalog = {0};", devInitialCatalog)
-            connectionString &= String.Format("User ID = {0};", devUserID)
-            connectionString &= String.Format("Password = {0};", devPassword)
-            connectionString &= String.Format("Connect Timeout = {0};", devTimeout)
-
+            If getConnection(systemErrorFlag, connectionString) Then Exit Try
             cn.ConnectionString = connectionString
             cn.Open()
 
@@ -137,18 +113,7 @@ Public Class clsSqlServerConnector
 
         Try
 
-            Dim devDataSource As String = System.Environment.GetEnvironmentVariable("DEV_DATA_SOURCE")
-            Dim devInitialCatalog As String = System.Environment.GetEnvironmentVariable("DEV_INITIAL_CATALOG")
-            Dim devUserID As String = System.Environment.GetEnvironmentVariable("DEV_USER")
-            Dim devPassword As String = System.Environment.GetEnvironmentVariable("DEV_PASSWORD")
-            Dim devTimeout As String = System.Environment.GetEnvironmentVariable("DEV_TIMEOUT")
-
-            Dim connectionString As String = ""
-            connectionString &= String.Format("Data Source = {0};", devDataSource)
-            connectionString &= String.Format("Initial Catalog = {0};", devInitialCatalog)
-            connectionString &= String.Format("User ID = {0};", devUserID)
-            connectionString &= String.Format("Password = {0};", devPassword)
-            connectionString &= String.Format("Connect Timeout = {0};", devTimeout)
+            If getConnection(systemErrorFlag, connectionString) Then Exit Try
             cn.ConnectionString = connectionString
 
             cn.Open()
@@ -180,6 +145,38 @@ Public Class clsSqlServerConnector
         Finally
             cn.Close()
             cn.Dispose()
+        End Try
+
+        Return systemErrorFlag
+    End Function
+
+    ''' <summary>
+    ''' SQLServerへの接続先情報を取得する
+    ''' </summary>
+    ''' <param name="systemErrorFlag">システムエラーフラグ</param>
+    ''' <param name="connectionString">接続先情報</param>
+    ''' <returns>システムエラーフラグ</returns>
+    Public Function getConnection(ByRef systemErrorFlag As Boolean, ByRef connectionString As String) As Boolean
+
+        Try
+            '接続先情報を取得
+            Dim devDataSource As String = System.Environment.GetEnvironmentVariable("DEV_DATA_SOURCE")
+            Dim devInitialCatalog As String = System.Environment.GetEnvironmentVariable("DEV_INITIAL_CATALOG")
+            Dim devUserID As String = System.Environment.GetEnvironmentVariable("DEV_USER")
+            Dim devPassword As String = System.Environment.GetEnvironmentVariable("DEV_PASSWORD")
+            Dim devTimeout As String = System.Environment.GetEnvironmentVariable("DEV_TIMEOUT")
+
+            '接続先情報を構築
+            connectionString = ""
+            connectionString &= String.Format("Data Source = {0};", devDataSource)
+            connectionString &= String.Format("Initial Catalog = {0};", devInitialCatalog)
+            connectionString &= String.Format("User ID = {0};", devUserID)
+            connectionString &= String.Format("Password = {0};", devPassword)
+            connectionString &= String.Format("Connect Timeout = {0};", devTimeout)
+
+        Catch ex As Exception
+            systemErrorFlag = True
+            MessageBox.Show("エラーが発生しました： " & ex.Message)
         End Try
 
         Return systemErrorFlag
