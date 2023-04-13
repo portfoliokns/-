@@ -59,6 +59,7 @@
             txtRePassword.Visible = True
             txtRePassword.Text = ""
             btnAdd.Enabled = True
+            txtRePassword.Focus()
         End If
     End Sub
 
@@ -97,16 +98,15 @@
             Dim userExist As Boolean
             If UserInfo.checkUserExist(systemErrorFlag, userID, userExist) Then Exit Try
             If userExist Then
-                MessageBox.Show("ユーザーIDがすでに登録されています。")
+                MessageBox.Show("ユーザーIDがすでに登録されています。他のユーザーIDで登録し直してください。")
                 txtUserID.Focus()
                 Exit Try
             End If
 
             'SQLServer側に登録
             If UserInfo.createUserInfo(systemErrorFlag, userID, password) Then Exit Try
-            MessageBox.Show("アカウントが作成されました。")
+            MessageBox.Show("新しいアカウントを登録しました。パスワードは忘れないようにしてください。")
             Me.Close()
-
 
         Catch ex As Exception
             MessageBox.Show("エラーが発生しました： " & ex.Message)

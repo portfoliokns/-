@@ -126,10 +126,10 @@ Public Class clsSqlServerConnector
     ''' <summary>
     ''' ユーザー情報を登録する
     ''' </summary>
-    ''' <param name="systemErrorFlag"></param>
-    ''' <param name="userID"></param>
-    ''' <param name="isExist"></param>
-    ''' <returns></returns>
+    ''' <param name="systemErrorFlag">システムエラーフラグ</param>
+    ''' <param name="userID">ユーザーID</param>
+    ''' <param name="password"></param>
+    ''' <returns>システムエラーフラグ</returns>
     Public Function insertUserInfo(ByRef systemErrorFlag As Boolean, ByRef userID As String, ByRef password As String) As Boolean
         Dim cn As New SqlClient.SqlConnection
         Dim SQL As String = ""
@@ -152,22 +152,18 @@ Public Class clsSqlServerConnector
             cn.ConnectionString = connectionString
 
             cn.Open()
-
             SQL = ""
             SQL &= String.Format("SELECT MAX(id) AS maxID ")
             SQL &= String.Format("FROM UserInfo; ")
 
             Dim cdSelect As New SqlCommand(SQL, cn)
             Dim dr As SqlDataReader = cdSelect.ExecuteReader
-
             While dr.Read
                 maxID = dr("maxID")
             End While
-
             cn.Close()
 
             cn.Open()
-
             SQL = ""
             SQL &= String.Format("INSERT INTO UserInfo (id, user_id, password) ")
             SQL &= String.Format("VALUES (@id, @userID, @password); ")

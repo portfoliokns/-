@@ -27,10 +27,10 @@
     ''' <summary>
     ''' ユーザー情報を登録する
     ''' </summary>
-    ''' <param name="systemErrorFlag"></param>
-    ''' <param name="userID"></param>
-    ''' <param name="password"></param>
-    ''' <returns></returns>
+    ''' <param name="systemErrorFlag">システムエラーフラグ</param>
+    ''' <param name="userID">ユーザーID</param>
+    ''' <param name="password">パスワード</param>
+    ''' <returns>システムエラーフラグ</returns>
     Public Function createUserInfo(ByRef systemErrorFlag As Boolean, ByRef userID As String, ByRef password As String) As Boolean
 
         Try
