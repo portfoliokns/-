@@ -92,9 +92,15 @@
                 Exit Try
             End If
 
-            'パスワード登録状況を確認
-
-
+            'ユーザーIDの登録状況を確認
+            Dim sqlServerConnector As New clsSqlServerConnector
+            Dim userExist As Boolean
+            If sqlServerConnector.checkUserExist(systemErrorFlag, userID, userExist) Then Exit Try
+            If userExist Then
+                MessageBox.Show("ユーザーIDがすでに登録されています。")
+                txtUserID.Focus()
+                Exit Try
+            End If
 
             'SQLServer側に登録
 
