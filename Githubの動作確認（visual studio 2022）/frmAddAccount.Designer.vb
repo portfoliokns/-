@@ -22,9 +22,15 @@ Partial Class frmAddAccount
     'コード エディターを使って変更しないでください。
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        components = New System.ComponentModel.Container
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(800, 450)
-        Me.Text = "frmAddAccount"
+        SuspendLayout()
+        ' 
+        ' frmAddAccount
+        ' 
+        AutoScaleDimensions = New SizeF(7F, 15F)
+        AutoScaleMode = AutoScaleMode.Font
+        ClientSize = New Size(800, 450)
+        Name = "frmAddAccount"
+        Text = "アカウント登録"
+        ResumeLayout(False)
     End Sub
 End Class
