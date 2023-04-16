@@ -1,5 +1,4 @@
 ﻿Public Class clsUserInfo
-
     ''' <summary>
     ''' ユーザーIDの登録状況を確認する
     ''' </summary>
@@ -10,7 +9,6 @@
     Public Function checkUserExist(ByRef systemErrorFlag As Boolean, ByRef userID As String, ByRef userExist As Boolean) As Boolean
 
         Try
-
             'SQL接続
             Dim sqlServerConnector As New clsSqlServerConnector
             If sqlServerConnector.checkUserExist(systemErrorFlag, userID, userExist) Then Exit Try

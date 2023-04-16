@@ -5,6 +5,38 @@ Imports System.Net
 ''' SQLServer接続基盤
 ''' </summary>
 Public Class clsSqlServerConnector
+    ''' <summary>
+    ''' SQLServerへの接続先情報を取得する
+    ''' </summary>
+    ''' <param name="systemErrorFlag">システムエラーフラグ</param>
+    ''' <param name="connectionString">接続先情報</param>
+    ''' <returns>システムエラーフラグ</returns>
+    Public Function getConnection(ByRef systemErrorFlag As Boolean, ByRef connectionString As String) As Boolean
+
+        Try
+            '接続先情報を取得
+            Dim devDataSource As String = System.Environment.GetEnvironmentVariable("DEV_DATA_SOURCE")
+            Dim devInitialCatalog As String = System.Environment.GetEnvironmentVariable("DEV_INITIAL_CATALOG")
+            Dim devUserID As String = System.Environment.GetEnvironmentVariable("DEV_USER")
+            Dim devPassword As String = System.Environment.GetEnvironmentVariable("DEV_PASSWORD")
+            Dim devTimeout As String = System.Environment.GetEnvironmentVariable("DEV_TIMEOUT")
+
+            '接続先情報を構築
+            connectionString = ""
+            connectionString &= String.Format("Data Source = {0};", devDataSource)
+            connectionString &= String.Format("Initial Catalog = {0};", devInitialCatalog)
+            connectionString &= String.Format("User ID = {0};", devUserID)
+            connectionString &= String.Format("Password = {0};", devPassword)
+            connectionString &= String.Format("Connect Timeout = {0};", devTimeout)
+
+        Catch ex As Exception
+            systemErrorFlag = True
+            MessageBox.Show("エラーが発生しました： " & ex.Message)
+        End Try
+
+        Return systemErrorFlag
+    End Function
+
     Private connectionString As String
     ''' <summary>
     ''' 認証結果を問い合わせる
@@ -16,6 +48,7 @@ Public Class clsSqlServerConnector
     ''' <returns>システムエラーフラグ</returns>
     Public Function getAuthentication(ByRef systemErrorFlag As Boolean, ByRef userID As String, ByRef password As String, ByRef isAuthenticated As Boolean) As Boolean
         Dim cn As New SqlClient.SqlConnection
+        Dim SQL As String = ""
 
         Try
 
@@ -23,7 +56,7 @@ Public Class clsSqlServerConnector
             cn.ConnectionString = connectionString
             cn.Open()
 
-            Dim SQL As String = ""
+            SQL = ""
             SQL &= String.Format("SELECT CASE WHEN EXISTS ")
             SQL &= String.Format("( ")
             SQL &= String.Format("  SELECT 1 ")
@@ -63,6 +96,7 @@ Public Class clsSqlServerConnector
     ''' <returns>システムエラーフラグ</returns>
     Public Function checkUserExist(ByRef systemErrorFlag As Boolean, ByRef userID As String, ByRef isExist As Boolean) As Boolean
         Dim cn As New SqlClient.SqlConnection
+        Dim SQL As String = ""
 
         Try
 
@@ -70,7 +104,7 @@ Public Class clsSqlServerConnector
             cn.ConnectionString = connectionString
             cn.Open()
 
-            Dim SQL As String = ""
+            SQL = ""
             SQL &= String.Format("SELECT CASE WHEN EXISTS ")
             SQL &= String.Format("( ")
             SQL &= String.Format("  SELECT 1 ")
@@ -116,8 +150,8 @@ Public Class clsSqlServerConnector
 
             If getConnection(systemErrorFlag, connectionString) Then Exit Try
             cn.ConnectionString = connectionString
-
             cn.Open()
+
             SQL = ""
             SQL &= String.Format("SELECT MAX(id) AS maxID ")
             SQL &= String.Format("FROM UserInfo; ")
@@ -165,8 +199,8 @@ Public Class clsSqlServerConnector
 
             If getConnection(systemErrorFlag, connectionString) Then Exit Try
             cn.ConnectionString = connectionString
-
             cn.Open()
+
             SQL = ""
             SQL &= String.Format("BEGIN TRANSACTION; ")
             SQL &= String.Format(" ")
@@ -213,6 +247,7 @@ Public Class clsSqlServerConnector
             cn.ConnectionString = connectionString
             cn.Open()
 
+            SQL = ""
             SQL &= String.Format("SELECT CASE WHEN EXISTS ")
             SQL &= String.Format("( ")
             SQL &= String.Format("  SELECT 1 ")
@@ -254,8 +289,8 @@ Public Class clsSqlServerConnector
 
             If getConnection(systemErrorFlag, connectionString) Then Exit Try
             cn.ConnectionString = connectionString
-
             cn.Open()
+
             SQL = ""
             SQL &= String.Format("BEGIN TRANSACTION; ")
             SQL &= String.Format(" ")
@@ -278,37 +313,4 @@ Public Class clsSqlServerConnector
         Return systemErrorFlag
     End Function
 
-
-
-    ''' <summary>
-    ''' SQLServerへの接続先情報を取得する
-    ''' </summary>
-    ''' <param name="systemErrorFlag">システムエラーフラグ</param>
-    ''' <param name="connectionString">接続先情報</param>
-    ''' <returns>システムエラーフラグ</returns>
-    Public Function getConnection(ByRef systemErrorFlag As Boolean, ByRef connectionString As String) As Boolean
-
-        Try
-            '接続先情報を取得
-            Dim devDataSource As String = System.Environment.GetEnvironmentVariable("DEV_DATA_SOURCE")
-            Dim devInitialCatalog As String = System.Environment.GetEnvironmentVariable("DEV_INITIAL_CATALOG")
-            Dim devUserID As String = System.Environment.GetEnvironmentVariable("DEV_USER")
-            Dim devPassword As String = System.Environment.GetEnvironmentVariable("DEV_PASSWORD")
-            Dim devTimeout As String = System.Environment.GetEnvironmentVariable("DEV_TIMEOUT")
-
-            '接続先情報を構築
-            connectionString = ""
-            connectionString &= String.Format("Data Source = {0};", devDataSource)
-            connectionString &= String.Format("Initial Catalog = {0};", devInitialCatalog)
-            connectionString &= String.Format("User ID = {0};", devUserID)
-            connectionString &= String.Format("Password = {0};", devPassword)
-            connectionString &= String.Format("Connect Timeout = {0};", devTimeout)
-
-        Catch ex As Exception
-            systemErrorFlag = True
-            MessageBox.Show("エラーが発生しました： " & ex.Message)
-        End Try
-
-        Return systemErrorFlag
-    End Function
 End Class

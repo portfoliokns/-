@@ -1,4 +1,7 @@
-﻿Public Class clsRevokeController
+﻿''' <summary>
+''' リボーク制御基盤
+''' </summary>
+Public Class clsRevokeController
     Private revokeThreshold As Integer = System.Environment.GetEnvironmentVariable("DEV_REVOKE_THRESHOLD")
 
     ''' <summary>
