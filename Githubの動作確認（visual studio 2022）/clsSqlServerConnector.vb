@@ -197,6 +197,90 @@ Public Class clsSqlServerConnector
     End Function
 
     ''' <summary>
+    ''' リボークの状態を確認する
+    ''' </summary>
+    ''' <param name="systemErrorFlag">システムエラーフラグ</param>
+    ''' <param name="userID">ユーザーID</param>
+    ''' <param name="revokeStatus">リボーク状態</param>
+    ''' <returns>システムエラーフラグ</returns>
+    Public Function checkRevokeStatus(ByRef systemErrorFlag As Boolean, ByRef userID As String, ByRef revokeStatus As Boolean) As Boolean
+        Dim cn As New SqlClient.SqlConnection
+        Dim SQL As String = ""
+
+        Try
+
+            If getConnection(systemErrorFlag, connectionString) Then Exit Try
+            cn.ConnectionString = connectionString
+            cn.Open()
+
+            SQL &= String.Format("SELECT CASE WHEN EXISTS ")
+            SQL &= String.Format("( ")
+            SQL &= String.Format("  SELECT 1 ")
+            SQL &= String.Format("  FROM USERINFO ")
+            SQL &= String.Format("  WHERE user_id = @userID ")
+            SQL &= String.Format("  AND revoke_flag = 'True' ")
+            SQL &= String.Format(") ")
+            SQL &= String.Format("THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS revokeStatus")
+
+            Dim cd As New SqlCommand(SQL, cn)
+            cd.Parameters.AddWithValue("@userID", userID)
+
+            Dim dr As SqlDataReader = cd.ExecuteReader
+
+            While dr.Read
+                revokeStatus = dr("revokeStatus")
+            End While
+
+        Catch ex As Exception
+            systemErrorFlag = True
+            MessageBox.Show("エラーが発生しました： " & ex.Message)
+        Finally
+        End Try
+
+        Return systemErrorFlag
+    End Function
+
+    ''' <summary>
+    ''' リボークのカウントを「0」にする
+    ''' </summary>
+    ''' <param name="systemErrorFlag">システムエラーフラグ</param>
+    ''' <param name="userID">ユーザーID</param>
+    ''' <returns>システムエラーフラグ</returns>
+    Public Function resetRevokeCount(ByRef systemErrorFlag As Boolean, ByRef userID As String) As Boolean
+        Dim cn As New SqlClient.SqlConnection
+        Dim SQL As String = ""
+
+        Try
+
+            If getConnection(systemErrorFlag, connectionString) Then Exit Try
+            cn.ConnectionString = connectionString
+
+            cn.Open()
+            SQL = ""
+            SQL &= String.Format("BEGIN TRANSACTION; ")
+            SQL &= String.Format(" ")
+            SQL &= String.Format("UPDATE UserInfo ")
+            SQL &= String.Format("SET revoke_count = 0 ")
+            SQL &= String.Format("WHERE user_id = @userID; ")
+            SQL &= String.Format(" ")
+            SQL &= String.Format("COMMIT; ")
+
+            Dim cd As New SqlCommand(SQL, cn)
+            cd.Parameters.AddWithValue("@userID", userID)
+            cd.ExecuteNonQuery()
+
+        Catch ex As Exception
+            systemErrorFlag = True
+            MessageBox.Show("エラーが発生しました： " & ex.Message)
+        Finally
+        End Try
+
+        Return systemErrorFlag
+    End Function
+
+
+
+    ''' <summary>
     ''' SQLServerへの接続先情報を取得する
     ''' </summary>
     ''' <param name="systemErrorFlag">システムエラーフラグ</param>
