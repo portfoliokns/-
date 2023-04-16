@@ -70,6 +70,8 @@
                 Me.Show()
                 Me.OnLoad(e)
             Else
+                Dim revokeCounter As New clsRevokeCounter
+                revokeCounter.addRevokeCount(systemErrorFlag, userID)
                 MessageBox.Show("ユーザーIDまたはパスワードに誤りがあります。")
             End If
 

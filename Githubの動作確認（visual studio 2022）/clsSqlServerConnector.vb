@@ -1,4 +1,5 @@
 ﻿Imports System.Data.SqlClient
+Imports System.Net
 
 ''' <summary>
 ''' SQLServer接続基盤
@@ -151,6 +152,51 @@ Public Class clsSqlServerConnector
     End Function
 
     ''' <summary>
+    ''' リボークカウントを「１」加算し、閾値に応じてリボーク状態にする
+    ''' </summary>
+    ''' <param name="systemErrorFlag">システムエラーフラグ</param>
+    ''' <param name="userID">ユーザーID</param>
+    ''' <returns>システムエラーフラグ</returns>
+    Public Function addCountAndRevoke(ByRef systemErrorFlag As Boolean, ByRef userID As String, ByRef revokeCount As Integer) As Boolean
+        Dim cn As New SqlClient.SqlConnection
+        Dim SQL As String = ""
+
+        Try
+
+            If getConnection(systemErrorFlag, connectionString) Then Exit Try
+            cn.ConnectionString = connectionString
+
+            cn.Open()
+            SQL = ""
+            SQL &= String.Format("BEGIN TRANSACTION; ")
+            SQL &= String.Format(" ")
+            SQL &= String.Format("UPDATE UserInfo ")
+            SQL &= String.Format("SET revoke_count = revoke_count + 1 ")
+            SQL &= String.Format("WHERE user_id = @userID; ")
+            SQL &= String.Format(" ")
+            SQL &= String.Format("UPDATE UserInfo ")
+            SQL &= String.Format("SET revoke_flag = 'True' ")
+            SQL &= String.Format("WHERE user_id = @userID ")
+            SQL &= String.Format("AND ")
+            SQL &= String.Format("revoke_count >= @revokeCount; ")
+            SQL &= String.Format(" ")
+            SQL &= String.Format("COMMIT; ")
+
+            Dim cd As New SqlCommand(SQL, cn)
+            cd.Parameters.AddWithValue("@userID", userID)
+            cd.Parameters.AddWithValue("@revokeCount", revokeCount)
+            cd.ExecuteNonQuery()
+
+        Catch ex As Exception
+            systemErrorFlag = True
+            MessageBox.Show("エラーが発生しました： " & ex.Message)
+        Finally
+        End Try
+
+        Return systemErrorFlag
+    End Function
+
+    ''' <summary>
     ''' SQLServerへの接続先情報を取得する
     ''' </summary>
     ''' <param name="systemErrorFlag">システムエラーフラグ</param>
@@ -181,5 +227,4 @@ Public Class clsSqlServerConnector
 
         Return systemErrorFlag
     End Function
-
 End Class
