@@ -165,8 +165,8 @@ Public Class clsSqlServerConnector
 
             cn.Open()
             SQL = ""
-            SQL &= String.Format("INSERT INTO UserInfo (id, user_id, password) ")
-            SQL &= String.Format("VALUES (@id, @userID, @password); ")
+            SQL &= String.Format("INSERT INTO UserInfo (id, user_id, password,revoke_count, revoke_flag) ")
+            SQL &= String.Format("VALUES (@id, @userID, @password, 0, 'False'); ")
 
             Dim cdInsert As New SqlCommand(SQL, cn)
             cdInsert.Parameters.AddWithValue("@id", maxID + 1)
