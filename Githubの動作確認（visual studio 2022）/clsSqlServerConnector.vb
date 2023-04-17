@@ -1,5 +1,4 @@
 ﻿Imports System.Data.SqlClient
-Imports System.Net
 
 ''' <summary>
 ''' SQLServer接続基盤
