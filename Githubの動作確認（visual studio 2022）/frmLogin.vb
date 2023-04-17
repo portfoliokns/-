@@ -104,7 +104,7 @@ Public Class frmLogin
             If revokeController.resetRevokeCount(systemErrorFlag, userID, revokeStatus) Then Exit Try
 
             If revokeStatus Then
-                MessageBox.Show("アカウントがロックされています。管理者へ問い合わせてください。これは不正アクセスを防ぐのために、ロックされています。")
+                MessageBox.Show("アカウントがロックされています。管理者へ問い合わせてください。")
             Else
                 MessageBox.Show("認証に成功しました。ログインします。")
                 Me.Hide()
