@@ -1,4 +1,6 @@
-﻿Public Class frmLogin
+﻿Imports Microsoft.VisualBasic.ApplicationServices
+
+Public Class frmLogin
     ''' <summary>
     ''' フォームの初期化
     ''' </summary>
@@ -62,15 +64,11 @@
             Dim authenticator As New clsAuthenticator
             If authenticator.Authenticate(systemErrorFlag, userID, password) Then Exit Try
 
+            '認証可否の制御
             If authenticator.IsAuthenticated Then
-                MessageBox.Show("認証に成功しました。ログインします。")
-                Me.Hide()
-                Dim Main As New frmMain
-                Main.ShowDialog()
-                Me.Show()
-                Me.OnLoad(e)
+                If Me.goToMainScreen(systemErrorFlag, userID, e) Then Exit Try
             Else
-                MessageBox.Show("ユーザーIDまたはパスワードに誤りがあります。")
+                If Me.restartLogin(systemErrorFlag, userID) Then Exit Try
             End If
 
         Catch ex As Exception
@@ -89,5 +87,63 @@
     Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
         Application.Exit()
     End Sub
+
+    ''' <summary>
+    ''' 認証成功時の処理
+    ''' </summary>
+    ''' <param name="systemErrorFlag">システムエラーフラグ</param>
+    ''' <param name="userID">ユーザーID</param>
+    ''' <param name="e">EventArgs</param>
+    ''' <returns>システムエラーフラグ</returns>
+    Public Function goToMainScreen(ByRef systemErrorFlag As Boolean, ByRef userID As String, e As EventArgs) As Boolean
+
+        Try
+            'リボーク制御
+            Dim revokeController As New clsRevokeController
+            Dim revokeStatus As Boolean = True
+            If revokeController.resetRevokeCount(systemErrorFlag, userID, revokeStatus) Then Exit Try
+
+            If revokeStatus Then
+                MessageBox.Show("アカウントがロックされています。管理者へ問い合わせてください。")
+            Else
+                MessageBox.Show("認証に成功しました。ログインします。")
+                Me.Hide()
+                Dim Main As New frmMain
+                Main.ShowDialog()
+                Me.Show()
+                Me.OnLoad(e)
+            End If
+
+        Catch ex As Exception
+            systemErrorFlag = True
+            MessageBox.Show("エラーが発生しました： " & ex.Message)
+        Finally
+        End Try
+
+        Return systemErrorFlag
+    End Function
+
+    ''' <summary>
+    ''' 認証失敗時の処理
+    ''' </summary>
+    ''' <param name="systemErrorFlag">システムエラーフラグ</param>
+    ''' <param name="userID">ユーザーID</param>
+    ''' <returns>システムエラーフラグ</returns>
+    Public Function restartLogin(ByRef systemErrorFlag As Boolean, ByRef userID As String) As Boolean
+
+        Try
+            'リボーク制御
+            Dim revokeController As New clsRevokeController
+            revokeController.addRevokeCount(systemErrorFlag, userID)
+            MessageBox.Show("ユーザーIDまたはパスワードに誤りがあります。")
+
+        Catch ex As Exception
+            systemErrorFlag = True
+            MessageBox.Show("エラーが発生しました： " & ex.Message)
+        Finally
+        End Try
+
+        Return systemErrorFlag
+    End Function
 
 End Class
