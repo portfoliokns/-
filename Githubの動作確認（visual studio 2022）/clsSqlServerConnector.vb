@@ -296,7 +296,8 @@ Public Class clsSqlServerConnector
             SQL &= String.Format(" ")
             SQL &= String.Format("UPDATE UserInfo ")
             SQL &= String.Format("SET revoke_count = 0 ")
-            SQL &= String.Format("WHERE user_id = @userID; ")
+            SQL &= String.Format("WHERE user_id = @userID ")
+            SQL &= String.Format("AND revoke_flag = 'False'; ")
             SQL &= String.Format(" ")
             SQL &= String.Format("COMMIT; ")
 
