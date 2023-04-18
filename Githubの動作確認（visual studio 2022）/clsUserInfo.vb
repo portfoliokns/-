@@ -28,8 +28,9 @@
     ''' <param name="systemErrorFlag">システムエラーフラグ</param>
     ''' <param name="userID">ユーザーID</param>
     ''' <param name="password">パスワード</param>
+    ''' <param name="adminFlag">管理者フラグ</param>
     ''' <returns>システムエラーフラグ</returns>
-    Public Function createUserInfo(ByRef systemErrorFlag As Boolean, ByRef userID As String, ByRef password As String) As Boolean
+    Public Function createUserInfo(ByRef systemErrorFlag As Boolean, ByRef userID As String, ByRef password As String, ByRef adminFlag As Boolean) As Boolean
 
         Try
             'パスワードのハッシュ化
@@ -39,7 +40,7 @@
 
             'SQL接続
             Dim sqlServerConnector As New clsSqlServerConnector
-            If sqlServerConnector.insertUserInfo(systemErrorFlag, userID, password) Then Exit Try
+            If sqlServerConnector.insertUserInfo(systemErrorFlag, userID, password, adminFlag) Then Exit Try
 
         Catch ex As Exception
             systemErrorFlag = True

@@ -73,7 +73,7 @@ Partial Class frmAddAccount
         btnAdd.Location = New Point(41, 248)
         btnAdd.Name = "btnAdd"
         btnAdd.Size = New Size(75, 23)
-        btnAdd.TabIndex = 7
+        btnAdd.TabIndex = 8
         btnAdd.Text = "登録"
         btnAdd.UseVisualStyleBackColor = True
         ' 
@@ -82,7 +82,7 @@ Partial Class frmAddAccount
         btnClose.Location = New Point(141, 248)
         btnClose.Name = "btnClose"
         btnClose.Size = New Size(75, 23)
-        btnClose.TabIndex = 8
+        btnClose.TabIndex = 9
         btnClose.Text = "閉じる"
         btnClose.UseVisualStyleBackColor = True
         ' 
@@ -118,9 +118,9 @@ Partial Class frmAddAccount
         ckbAdmin.AutoSize = True
         ckbAdmin.Location = New Point(81, 207)
         ckbAdmin.Name = "ckbAdmin"
-        ckbAdmin.Size = New Size(89, 19)
-        ckbAdmin.TabIndex = 9
-        ckbAdmin.Text = "管理者 付与"
+        ckbAdmin.Size = New Size(113, 19)
+        ckbAdmin.TabIndex = 7
+        ckbAdmin.Text = "管理者権限 付与"
         ckbAdmin.UseVisualStyleBackColor = True
         ' 
         ' frmAddAccount

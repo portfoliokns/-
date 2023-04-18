@@ -43,7 +43,7 @@
     End Sub
 
     ''' <summary>
-    ''' チェックボックス、チェック時の処理
+    ''' チェックボックス、チェック時の処理(パスワードを表示)
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
@@ -60,6 +60,17 @@
             txtRePassword.Text = ""
             btnAdd.Enabled = True
             txtRePassword.Focus()
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' チェックボックス、チェック時の処理(管理者権限付与)
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub ckbAdmin_KeyDown(sender As Object, e As KeyEventArgs) Handles ckbAdmin.KeyDown
+        If e.KeyCode = Keys.Enter Then
+            btnAdd.PerformClick()
         End If
     End Sub
 
@@ -104,7 +115,8 @@
             End If
 
             'SQLServer側に登録
-            If UserInfo.createUserInfo(systemErrorFlag, userID, password) Then Exit Try
+            Dim adminFlag As Boolean = ckbAdmin.Checked
+            If UserInfo.createUserInfo(systemErrorFlag, userID, password, adminFlag) Then Exit Try
             MessageBox.Show("新しいアカウントを登録しました。パスワードは忘れないようにしてください。")
             Me.Close()
 
@@ -115,12 +127,6 @@
         End Try
 
     End Sub
-
-
-    Private Sub rbtnGeneral_CheckedChanged(sender As Object, e As EventArgs) Handles rbtnGeneral.CheckedChanged
-
-    End Sub
-
 
     ''' <summary>
     ''' 閉じるボタン、クリック時の処理

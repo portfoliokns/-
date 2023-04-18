@@ -138,9 +138,10 @@ Public Class clsSqlServerConnector
     ''' </summary>
     ''' <param name="systemErrorFlag">システムエラーフラグ</param>
     ''' <param name="userID">ユーザーID</param>
-    ''' <param name="password"></param>
+    ''' <param name="password">パスワード</param>
+    ''' <param name="adminFlag">管理者フラグ</param>
     ''' <returns>システムエラーフラグ</returns>
-    Public Function insertUserInfo(ByRef systemErrorFlag As Boolean, ByRef userID As String, ByRef password As String) As Boolean
+    Public Function insertUserInfo(ByRef systemErrorFlag As Boolean, ByRef userID As String, ByRef password As String, ByRef adminFlag As String) As Boolean
         Dim cn As New SqlClient.SqlConnection
         Dim SQL As String = ""
         Dim maxID As Integer
@@ -164,13 +165,14 @@ Public Class clsSqlServerConnector
 
             cn.Open()
             SQL = ""
-            SQL &= String.Format("INSERT INTO UserInfo (id, user_id, password,revoke_count, revoke_flag) ")
-            SQL &= String.Format("VALUES (@id, @userID, @password, 0, 'False'); ")
+            SQL &= String.Format("INSERT INTO UserInfo (id, user_id, password,revoke_count, revoke_flag, admin_flag) ")
+            SQL &= String.Format("VALUES (@id, @userID, @password, 0, 'False', @admin_flag); ")
 
             Dim cdInsert As New SqlCommand(SQL, cn)
             cdInsert.Parameters.AddWithValue("@id", maxID + 1)
             cdInsert.Parameters.AddWithValue("@userID", userID)
             cdInsert.Parameters.AddWithValue("@password", password)
+            cdInsert.Parameters.AddWithValue("@admin_flag", adminFlag)
             cdInsert.ExecuteNonQuery()
 
         Catch ex As Exception
