@@ -116,6 +116,12 @@
 
     End Sub
 
+
+    Private Sub rbtnGeneral_CheckedChanged(sender As Object, e As EventArgs) Handles rbtnGeneral.CheckedChanged
+
+    End Sub
+
+
     ''' <summary>
     ''' 閉じるボタン、クリック時の処理
     ''' </summary>
