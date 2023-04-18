@@ -315,7 +315,13 @@ Public Class clsSqlServerConnector
         Return systemErrorFlag
     End Function
 
-
+    ''' <summary>
+    ''' 管理者権限を確認する
+    ''' </summary>
+    ''' <param name="systemErrorFlag">システムエラーフラグ</param>
+    ''' <param name="userID">ユーザーID</param>
+    ''' <param name="isAdmin">管理者結果</param>
+    ''' <returns>システムエラーフラグ</returns>
     Public Function checkAdmin(ByRef systemErrorFlag As Boolean, ByRef userID As String, ByRef isAdmin As Boolean) As Boolean
         Dim cn As New SqlClient.SqlConnection
         Dim SQL As String = ""

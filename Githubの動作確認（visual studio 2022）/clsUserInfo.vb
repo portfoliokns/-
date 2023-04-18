@@ -51,7 +51,13 @@
         Return systemErrorFlag
     End Function
 
-
+    ''' <summary>
+    ''' 管理者権限があるかを確認する
+    ''' </summary>
+    ''' <param name="systemErrorFlag">システムエラーフラグ</param>
+    ''' <param name="userID">ユーザーID</param>
+    ''' <param name="isAdmin">権限結果</param>
+    ''' <returns>システムエラーフラグ</returns>
     Public Function checkAddmin(ByRef systemErrorFlag As Boolean, ByRef userID As String, ByRef isAdmin As Boolean) As Boolean
 
         Try
