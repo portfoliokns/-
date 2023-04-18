@@ -320,7 +320,7 @@ Public Class clsSqlServerConnector
     ''' </summary>
     ''' <param name="systemErrorFlag">システムエラーフラグ</param>
     ''' <param name="userID">ユーザーID</param>
-    ''' <param name="isAdmin">管理者結果</param>
+    ''' <param name="isAdmin">権限結果</param>
     ''' <returns>システムエラーフラグ</returns>
     Public Function checkAdmin(ByRef systemErrorFlag As Boolean, ByRef userID As String, ByRef isAdmin As Boolean) As Boolean
         Dim cn As New SqlClient.SqlConnection
