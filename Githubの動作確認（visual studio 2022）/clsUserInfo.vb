@@ -56,7 +56,7 @@
         Try
             'SQL接続
             Dim sqlServerConnector As New clsSqlServerConnector
-            'If sqlServerConnector.insertUserInfo(systemErrorFlag, userID, password) Then Exit Try
+            If sqlServerConnector.checkAdmin(systemErrorFlag, userID, isAdmin) Then Exit Try
 
         Catch ex As Exception
             systemErrorFlag = True
