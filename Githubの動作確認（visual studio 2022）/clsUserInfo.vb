@@ -50,4 +50,21 @@
         Return systemErrorFlag
     End Function
 
+
+    Public Function checkAddmin(ByRef systemErrorFlag As Boolean, ByRef userID As String, ByRef isAdmin As Boolean) As Boolean
+
+        Try
+            'SQL接続
+            Dim sqlServerConnector As New clsSqlServerConnector
+            'If sqlServerConnector.insertUserInfo(systemErrorFlag, userID, password) Then Exit Try
+
+        Catch ex As Exception
+            systemErrorFlag = True
+            MessageBox.Show("エラーが発生しました： " & ex.Message)
+        Finally
+        End Try
+
+        Return systemErrorFlag
+    End Function
+
 End Class

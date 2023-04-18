@@ -108,7 +108,8 @@ Public Class frmLogin
             Else
                 MessageBox.Show("認証に成功しました。ログインします。")
                 Me.Hide()
-                Dim Main As New frmMain
+                Dim Main As New frmMain()
+                Main.UserID = userID
                 Main.ShowDialog()
                 Me.Show()
                 Me.OnLoad(e)
