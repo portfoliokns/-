@@ -138,9 +138,10 @@ Public Class clsSqlServerConnector
     ''' </summary>
     ''' <param name="systemErrorFlag">システムエラーフラグ</param>
     ''' <param name="userID">ユーザーID</param>
-    ''' <param name="password"></param>
+    ''' <param name="password">パスワード</param>
+    ''' <param name="adminFlag">管理者フラグ</param>
     ''' <returns>システムエラーフラグ</returns>
-    Public Function insertUserInfo(ByRef systemErrorFlag As Boolean, ByRef userID As String, ByRef password As String) As Boolean
+    Public Function insertUserInfo(ByRef systemErrorFlag As Boolean, ByRef userID As String, ByRef password As String, ByRef adminFlag As String) As Boolean
         Dim cn As New SqlClient.SqlConnection
         Dim SQL As String = ""
         Dim maxID As Integer
@@ -164,13 +165,14 @@ Public Class clsSqlServerConnector
 
             cn.Open()
             SQL = ""
-            SQL &= String.Format("INSERT INTO UserInfo (id, user_id, password,revoke_count, revoke_flag) ")
-            SQL &= String.Format("VALUES (@id, @userID, @password, 0, 'False'); ")
+            SQL &= String.Format("INSERT INTO UserInfo (id, user_id, password,revoke_count, revoke_flag, admin_flag) ")
+            SQL &= String.Format("VALUES (@id, @userID, @password, 0, 'False', @admin_flag); ")
 
             Dim cdInsert As New SqlCommand(SQL, cn)
             cdInsert.Parameters.AddWithValue("@id", maxID + 1)
             cdInsert.Parameters.AddWithValue("@userID", userID)
             cdInsert.Parameters.AddWithValue("@password", password)
+            cdInsert.Parameters.AddWithValue("@admin_flag", adminFlag)
             cdInsert.ExecuteNonQuery()
 
         Catch ex As Exception
@@ -303,6 +305,51 @@ Public Class clsSqlServerConnector
             Dim cd As New SqlCommand(SQL, cn)
             cd.Parameters.AddWithValue("@userID", userID)
             cd.ExecuteNonQuery()
+
+        Catch ex As Exception
+            systemErrorFlag = True
+            MessageBox.Show("エラーが発生しました： " & ex.Message)
+        Finally
+        End Try
+
+        Return systemErrorFlag
+    End Function
+
+    ''' <summary>
+    ''' 管理者権限を確認する
+    ''' </summary>
+    ''' <param name="systemErrorFlag">システムエラーフラグ</param>
+    ''' <param name="userID">ユーザーID</param>
+    ''' <param name="isAdmin">権限結果</param>
+    ''' <returns>システムエラーフラグ</returns>
+    Public Function checkAdmin(ByRef systemErrorFlag As Boolean, ByRef userID As String, ByRef isAdmin As Boolean) As Boolean
+        Dim cn As New SqlClient.SqlConnection
+        Dim SQL As String = ""
+
+        Try
+
+            If getConnection(systemErrorFlag, connectionString) Then Exit Try
+            cn.ConnectionString = connectionString
+            cn.Open()
+
+            SQL = ""
+            SQL &= String.Format("SELECT CASE WHEN EXISTS ")
+            SQL &= String.Format("( ")
+            SQL &= String.Format("  SELECT 1 ")
+            SQL &= String.Format("  FROM USERINFO ")
+            SQL &= String.Format("  WHERE user_id = @userID ")
+            SQL &= String.Format("  AND admin_flag = 'True' ")
+            SQL &= String.Format(") ")
+            SQL &= String.Format("THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS isAdmin")
+
+            Dim cd As New SqlCommand(SQL, cn)
+            cd.Parameters.AddWithValue("@userID", userID)
+
+            Dim dr As SqlDataReader = cd.ExecuteReader
+
+            While dr.Read
+                isAdmin = dr("isAdmin")
+            End While
 
         Catch ex As Exception
             systemErrorFlag = True

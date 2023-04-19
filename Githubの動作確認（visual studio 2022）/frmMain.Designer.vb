@@ -28,12 +28,14 @@ Partial Class frmMain
         ' 
         ' btnAddAccount
         ' 
+        btnAddAccount.Enabled = False
         btnAddAccount.Location = New Point(187, 12)
         btnAddAccount.Name = "btnAddAccount"
         btnAddAccount.Size = New Size(87, 23)
         btnAddAccount.TabIndex = 0
         btnAddAccount.Text = "アカウント登録"
         btnAddAccount.UseVisualStyleBackColor = True
+        btnAddAccount.Visible = False
         ' 
         ' btnLogout
         ' 

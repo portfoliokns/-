@@ -31,6 +31,7 @@ Partial Class frmAddAccount
         txtRePassword = New TextBox()
         lblRePassword = New Label()
         ckbPassword = New CheckBox()
+        ckbAdmin = New CheckBox()
         SuspendLayout()
         ' 
         ' lblUserID
@@ -69,19 +70,19 @@ Partial Class frmAddAccount
         ' 
         ' btnAdd
         ' 
-        btnAdd.Location = New Point(41, 216)
+        btnAdd.Location = New Point(41, 248)
         btnAdd.Name = "btnAdd"
         btnAdd.Size = New Size(75, 23)
-        btnAdd.TabIndex = 7
+        btnAdd.TabIndex = 8
         btnAdd.Text = "登録"
         btnAdd.UseVisualStyleBackColor = True
         ' 
         ' btnClose
         ' 
-        btnClose.Location = New Point(141, 216)
+        btnClose.Location = New Point(141, 248)
         btnClose.Name = "btnClose"
         btnClose.Size = New Size(75, 23)
-        btnClose.TabIndex = 8
+        btnClose.TabIndex = 9
         btnClose.Text = "閉じる"
         btnClose.UseVisualStyleBackColor = True
         ' 
@@ -105,18 +106,29 @@ Partial Class frmAddAccount
         ' ckbPassword
         ' 
         ckbPassword.AutoSize = True
-        ckbPassword.Location = New Point(85, 176)
+        ckbPassword.Location = New Point(81, 176)
         ckbPassword.Name = "ckbPassword"
         ckbPassword.Size = New Size(103, 19)
         ckbPassword.TabIndex = 6
         ckbPassword.Text = "パスワードを表示"
         ckbPassword.UseVisualStyleBackColor = True
         ' 
+        ' ckbAdmin
+        ' 
+        ckbAdmin.AutoSize = True
+        ckbAdmin.Location = New Point(81, 207)
+        ckbAdmin.Name = "ckbAdmin"
+        ckbAdmin.Size = New Size(113, 19)
+        ckbAdmin.TabIndex = 7
+        ckbAdmin.Text = "管理者権限 付与"
+        ckbAdmin.UseVisualStyleBackColor = True
+        ' 
         ' frmAddAccount
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(256, 267)
+        ClientSize = New Size(256, 297)
+        Controls.Add(ckbAdmin)
         Controls.Add(ckbPassword)
         Controls.Add(txtRePassword)
         Controls.Add(lblRePassword)
@@ -141,4 +153,5 @@ Partial Class frmAddAccount
     Friend WithEvents txtRePassword As TextBox
     Friend WithEvents lblRePassword As Label
     Friend WithEvents ckbPassword As CheckBox
+    Friend WithEvents ckbAdmin As CheckBox
 End Class
