@@ -45,8 +45,8 @@
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Private Sub btnAddMaster_Click(sender As Object, e As EventArgs) Handles btnAddMaster.Click
-        'Dim AddAccount As New frmAddAccount
-        'AddAccount.Show()
+        Dim AddMaster As New frmMaster
+        AddMaster.Show()
     End Sub
 
     ''' <summary>
