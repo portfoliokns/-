@@ -24,11 +24,16 @@ Partial Class frmMaster
     Private Sub InitializeComponent()
         btnClose = New Button()
         btnSave = New Button()
+        DataGridView1 = New DataGridView()
+        Status = New DataGridViewTextBoxColumn()
+        DisplayNum = New DataGridViewTextBoxColumn()
+        Comment = New DataGridViewTextBoxColumn()
+        CType(DataGridView1, ComponentModel.ISupportInitialize).BeginInit()
         SuspendLayout()
         ' 
         ' btnClose
         ' 
-        btnClose.Location = New Point(662, 385)
+        btnClose.Location = New Point(494, 182)
         btnClose.Name = "btnClose"
         btnClose.Size = New Size(75, 23)
         btnClose.TabIndex = 11
@@ -37,25 +42,58 @@ Partial Class frmMaster
         ' 
         ' btnSave
         ' 
-        btnSave.Location = New Point(562, 385)
+        btnSave.Location = New Point(394, 182)
         btnSave.Name = "btnSave"
         btnSave.Size = New Size(75, 23)
         btnSave.TabIndex = 10
         btnSave.Text = "保存"
         btnSave.UseVisualStyleBackColor = True
         ' 
+        ' DataGridView1
+        ' 
+        DataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        DataGridView1.Columns.AddRange(New DataGridViewColumn() {Status, DisplayNum, Comment})
+        DataGridView1.Location = New Point(12, 12)
+        DataGridView1.Name = "DataGridView1"
+        DataGridView1.RowTemplate.Height = 25
+        DataGridView1.Size = New Size(580, 150)
+        DataGridView1.TabIndex = 12
+        ' 
+        ' Status
+        ' 
+        Status.HeaderText = "ステータス"
+        Status.Name = "Status"
+        ' 
+        ' DisplayNum
+        ' 
+        DisplayNum.HeaderText = "表示番号"
+        DisplayNum.Name = "DisplayNum"
+        DisplayNum.Width = 80
+        ' 
+        ' Comment
+        ' 
+        Comment.HeaderText = "コメント"
+        Comment.Name = "Comment"
+        Comment.Width = 300
+        ' 
         ' frmMaster
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(800, 450)
+        ClientSize = New Size(608, 220)
+        Controls.Add(DataGridView1)
         Controls.Add(btnClose)
         Controls.Add(btnSave)
         Name = "frmMaster"
         Text = "マスタ登録"
+        CType(DataGridView1, ComponentModel.ISupportInitialize).EndInit()
         ResumeLayout(False)
     End Sub
 
     Friend WithEvents btnClose As Button
     Friend WithEvents btnSave As Button
+    Friend WithEvents DataGridView1 As DataGridView
+    Friend WithEvents Status As DataGridViewTextBoxColumn
+    Friend WithEvents DisplayNum As DataGridViewTextBoxColumn
+    Friend WithEvents Comment As DataGridViewTextBoxColumn
 End Class
