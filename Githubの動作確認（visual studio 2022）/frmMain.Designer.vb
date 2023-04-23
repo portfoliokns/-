@@ -66,6 +66,7 @@ Partial Class frmMain
         Controls.Add(btnAddMaster)
         Controls.Add(btnLogout)
         Controls.Add(btnAddAccount)
+        FormBorderStyle = FormBorderStyle.FixedSingle
         Name = "frmMain"
         Text = "ログイン成功"
         ResumeLayout(False)

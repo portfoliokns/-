@@ -138,6 +138,7 @@ Partial Class frmAddAccount
         Controls.Add(txtUserID)
         Controls.Add(lblPassword)
         Controls.Add(lblUserID)
+        FormBorderStyle = FormBorderStyle.FixedSingle
         Name = "frmAddAccount"
         Text = "アカウント登録"
         ResumeLayout(False)

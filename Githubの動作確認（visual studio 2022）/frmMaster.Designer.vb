@@ -84,6 +84,7 @@ Partial Class frmMaster
         Controls.Add(DataGridView1)
         Controls.Add(btnClose)
         Controls.Add(btnSave)
+        FormBorderStyle = FormBorderStyle.FixedSingle
         Name = "frmMaster"
         Text = "マスタ登録"
         CType(DataGridView1, ComponentModel.ISupportInitialize).EndInit()

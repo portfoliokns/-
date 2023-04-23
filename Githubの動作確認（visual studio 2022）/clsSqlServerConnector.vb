@@ -360,4 +360,59 @@ Public Class clsSqlServerConnector
         Return systemErrorFlag
     End Function
 
+
+    ''' <summary>
+    ''' 状況マスタを取得する
+    ''' </summary>
+    ''' <param name="systemErrorFlag">システムエラーフラグ</param>
+    ''' <param name="userID">ユーザーID</param>
+    ''' <param name="isAdmin">権限結果</param>
+    ''' <returns>システムエラーフラグ</returns>
+    Public Function getStatusMaster(ByRef systemErrorFlag As Boolean, ByRef dtStatus As DataTable) As Boolean
+        Dim cn As New SqlClient.SqlConnection
+        Dim SQL As String = ""
+
+        Try
+
+            If getConnection(systemErrorFlag, connectionString) Then Exit Try
+            cn.ConnectionString = connectionString
+            cn.Open()
+
+            SQL = ""
+            SQL &= String.Format("SELECT * ")
+            SQL &= String.Format("FROM StatusMaster ")
+
+            Dim cd As New SqlCommand(SQL, cn)
+            Dim dr As SqlDataReader = cd.ExecuteReader
+
+            'DataTableの変数宣言
+            Dim dt As New DataTable("dtStatus")
+
+            '列追加
+            dt.Columns.Add("id")
+            dt.Columns.Add("status")
+            dt.Columns.Add("display_number")
+            dt.Columns.Add("comment")
+
+            While dr.Read
+                Dim dtRow As DataRow
+                dtRow = dt.NewRow
+                dtRow("id") = dr("id")
+                dtRow("status") = dr("status")
+                dtRow("display_number") = dr("display_number")
+                dtRow("comment") = dr("comment")
+                dt.Rows.Add(dtRow)
+            End While
+
+            dtStatus = dt
+
+        Catch ex As Exception
+            systemErrorFlag = True
+            MessageBox.Show("エラーが発生しました： " & ex.Message)
+        Finally
+        End Try
+
+        Return systemErrorFlag
+    End Function
+
 End Class
