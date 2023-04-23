@@ -388,22 +388,21 @@ Public Class clsSqlServerConnector
             'DataTableの変数宣言
             Dim dt As New DataTable("dtStatus")
 
-            '列追加
-            dt.Columns.Add("id")
-            dt.Columns.Add("status")
-            dt.Columns.Add("display_number")
-            dt.Columns.Add("comment")
+            ' 列名を取得する
+            For Each column As DataColumn In dtStatus.Columns
+                Dim columnName As String = column.ColumnName
+                dt.Columns.Add(columnName)
+            Next
 
             While dr.Read
                 Dim dtRow As DataRow
                 dtRow = dt.NewRow
                 dtRow("id") = dr("id")
-                dtRow("status") = dr("status")
-                dtRow("display_number") = dr("display_number")
-                dtRow("comment") = dr("comment")
+                dtRow("ステータス") = dr("status")
+                dtRow("表示順") = dr("display_number")
+                dtRow("コメント") = dr("comment")
                 dt.Rows.Add(dtRow)
             End While
-
             dtStatus = dt
 
         Catch ex As Exception

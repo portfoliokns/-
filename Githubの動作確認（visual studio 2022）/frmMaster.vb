@@ -6,16 +6,29 @@
     ''' <param name="e"></param>
     Private Sub frmMaster_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Dim systemErrorFlag As String = False
-        Dim dtStatus As DataTable = Nothing
+        Dim dtStatus As New DataTable("dtStatus")
+
+        '列追加
+        dtStatus.Columns.Add("id")
+        dtStatus.Columns.Add("ステータス")
+        dtStatus.Columns.Add("表示順")
+        dtStatus.Columns.Add("コメント")
 
         Try
-
             'データ取得
             Dim status As New clsStatus
             If status.getStatus(systemErrorFlag, dtStatus) Then Exit Try
 
             'データ設置
+            dgvStatus.DataSource = dtStatus
 
+            'デザイン設定
+            dgvStatus.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells)
+            dgvStatus.Columns(0).Visible = False
+            dgvStatus.Columns(0).ReadOnly = True
+            dgvStatus.Columns(1).Width = 100
+            dgvStatus.Columns(2).Width = 80
+            dgvStatus.Columns(3).Width = 350
 
         Catch ex As Exception
             MessageBox.Show("エラーが発生しました： " & ex.Message)
