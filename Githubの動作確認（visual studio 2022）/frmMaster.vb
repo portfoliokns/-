@@ -72,11 +72,12 @@
             If Me.checkEmpty(systemErrorFlag, checkErrorFlag) Then Exit Try
             If checkErrorFlag Then Exit Try
 
-            'データテーブルを更新
+            'データテーブルを設定
             If Me.setDataTable(systemErrorFlag, dtStatus) Then Exit Try
 
             'データ登録
-
+            Dim status As New clsStatus
+            status.setStatus(systemErrorFlag, dtStatus)
 
 
         Catch ex As Exception

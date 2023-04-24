@@ -405,4 +405,49 @@ Public Class clsSqlServerConnector
         Return systemErrorFlag
     End Function
 
+
+    Public Function insertStatus(ByRef systemErrorFlag As Boolean, ByRef dtStatus As DataTable) As Boolean
+        'Dim cn As New SqlClient.SqlConnection
+        'Dim SQL As String = ""
+        'Dim maxID As Integer
+
+        Try
+
+            'If getConnection(systemErrorFlag, connectionString) Then Exit Try
+            'cn.ConnectionString = connectionString
+            'cn.Open()
+
+            'SQL = ""
+            'SQL &= String.Format("SELECT MAX(id) AS maxID ")
+            'SQL &= String.Format("FROM UserInfo; ")
+
+            'Dim cdSelect As New SqlCommand(SQL, cn)
+            'Dim dr As SqlDataReader = cdSelect.ExecuteReader
+            'While dr.Read
+            '    maxID = dr("maxID")
+            'End While
+            'cn.Close()
+
+            'cn.Open()
+            'SQL = ""
+            'SQL &= String.Format("INSERT INTO UserInfo (id, user_id, password,revoke_count, revoke_flag, admin_flag) ")
+            'SQL &= String.Format("VALUES (@id, @userID, @password, 0, 'False', @admin_flag); ")
+
+            'Dim cdInsert As New SqlCommand(SQL, cn)
+            'cdInsert.Parameters.AddWithValue("@id", maxID + 1)
+            ''cdInsert.Parameters.AddWithValue("@userID", userID)
+            ''cdInsert.Parameters.AddWithValue("@password", password)
+            ''cdInsert.Parameters.AddWithValue("@admin_flag", adminFlag)
+            'cdInsert.ExecuteNonQuery()
+
+        Catch ex As Exception
+            systemErrorFlag = True
+            MessageBox.Show("エラーが発生しました： " & ex.Message)
+        Finally
+            cn.Close()
+            cn.Dispose()
+        End Try
+
+        Return systemErrorFlag
+    End Function
 End Class
