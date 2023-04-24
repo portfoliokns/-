@@ -63,17 +63,20 @@
     ''' <param name="e"></param>
     Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
         Dim systemErrorFlag As String = False
+        Dim checkErrorFlag As String = False
 
         Dim dtStatus As New DataTable("dtStatus")
 
         Try
-            'データテーブル更新
+            '空欄チェック
+            If Me.checkEmpty(systemErrorFlag, checkErrorFlag) Then Exit Try
+            If checkErrorFlag Then Exit Try
+
+            'データテーブルを更新
             If Me.setDataTable(systemErrorFlag, dtStatus) Then Exit Try
 
-            '入力チェック
-            If Me.checkData(systemErrorFlag, dtStatus) Then Exit Try
-
             'データ登録
+
 
 
         Catch ex As Exception
@@ -149,6 +152,9 @@
 
             '行を設定
             For Each row As DataGridViewRow In dgvStatus.Rows
+                '入力していない行は、テーブルに設定しない
+                If row.Cells("changed_flag").Value = False Then Continue For
+
                 Dim dataRow As DataRow = dtStatus.NewRow()
                 For Each cell As DataGridViewCell In row.Cells
                     dataRow(cell.ColumnIndex) = cell.Value
@@ -165,17 +171,33 @@
         Return systemErrorFlag
     End Function
 
-
-    Private Function checkData(ByRef systemErrorFlag As Boolean, ByRef dtStatus As DataTable) As Boolean
+    ''' <summary>
+    ''' 空欄をチェックする
+    ''' </summary>
+    ''' <param name="systemErrorFlag">システムエラーフラグ</param>
+    ''' <param name="checkErrorFlag">チェックフラグ</param>
+    ''' <returns>システムエラーフラグ</returns>
+    Private Function checkEmpty(ByRef systemErrorFlag As Boolean, ByRef checkErrorFlag As Boolean) As Boolean
 
         Try
-
-            '空欄チェック
             For Each row As DataGridViewRow In dgvStatus.Rows
 
+                '入力していない行は、チェックしない
+                If row.Cells("changed_flag").Value = False Then Continue For
 
+                'ステータス
+                If row.Cells("status").Value Is DBNull.Value Then
+                    checkErrorFlag = True
+                    MessageBox.Show("ステータスが空欄です。入力してください。")
+                    Exit Try
+                End If
 
-
+                '表示順
+                If row.Cells("display_number").Value Is DBNull.Value Then
+                    checkErrorFlag = True
+                    MessageBox.Show("表示順が空欄です。入力してください。")
+                    Exit Try
+                End If
             Next
 
         Catch ex As Exception
