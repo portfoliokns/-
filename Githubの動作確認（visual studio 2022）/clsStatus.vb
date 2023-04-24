@@ -13,6 +13,12 @@
             Dim sqlServerConnector As New clsSqlServerConnector
             If sqlServerConnector.getStatusMaster(systemErrorFlag, dtStatus) Then Exit Try
 
+            '列追加
+            dtStatus.Columns.Add("changed_flag")
+            For Each row As DataRow In dtStatus.Rows
+                row("changed_flag") = False
+            Next
+
         Catch ex As Exception
             systemErrorFlag = True
             MessageBox.Show("エラーが発生しました： " & ex.Message)
