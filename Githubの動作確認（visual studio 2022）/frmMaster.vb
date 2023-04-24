@@ -6,29 +6,20 @@
     ''' <param name="e"></param>
     Private Sub frmMaster_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Dim systemErrorFlag As String = False
-        Dim dtStatus As New DataTable("dtStatus")
 
-        '列追加
+        Dim dtStatus As New DataTable("dtStatus")
         dtStatus.Columns.Add("id")
-        dtStatus.Columns.Add("ステータス")
-        dtStatus.Columns.Add("表示順")
-        dtStatus.Columns.Add("コメント")
+        dtStatus.Columns.Add("status")
+        dtStatus.Columns.Add("display_number")
+        dtStatus.Columns.Add("comment")
 
         Try
             'データ取得
             Dim status As New clsStatus
             If status.getStatus(systemErrorFlag, dtStatus) Then Exit Try
 
-            'データ設置
-            dgvStatus.DataSource = dtStatus
-
             'デザイン設定
-            dgvStatus.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells)
-            dgvStatus.Columns(0).Visible = False
-            dgvStatus.Columns(0).ReadOnly = True
-            dgvStatus.Columns(1).Width = 100
-            dgvStatus.Columns(2).Width = 80
-            dgvStatus.Columns(3).Width = 350
+            If Me.setDesign(systemErrorFlag, dtStatus) Then Exit Try
 
         Catch ex As Exception
             MessageBox.Show("エラーが発生しました： " & ex.Message)
@@ -65,5 +56,35 @@
     Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
         Me.Close()
     End Sub
+
+
+    Private Function setDesign(ByRef systemErrorFlag As Boolean, ByRef dtStatus As DataTable) As Boolean
+
+        Try
+            'データテーブル設定
+            dgvStatus.DataSource = dtStatus
+
+            'デザイン設定
+            dgvStatus.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells)
+            dgvStatus.Columns("id").Width = 0
+            dgvStatus.Columns("status").Width = 100
+            dgvStatus.Columns("display_number").Width = 80
+            dgvStatus.Columns("comment").Width = 350
+
+            dgvStatus.Columns("id").Visible = False
+            dgvStatus.Columns("id").ReadOnly = True
+
+            dgvStatus.Columns("status").HeaderText = "ステータス"
+            dgvStatus.Columns("display_number").HeaderText = "表示順"
+            dgvStatus.Columns("comment").HeaderText = "コメント"
+
+        Catch ex As Exception
+            systemErrorFlag = True
+            MessageBox.Show("エラーが発生しました： " & ex.Message)
+        Finally
+        End Try
+
+        Return systemErrorFlag
+    End Function
 
 End Class

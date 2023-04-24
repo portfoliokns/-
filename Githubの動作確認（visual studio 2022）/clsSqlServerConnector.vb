@@ -385,25 +385,15 @@ Public Class clsSqlServerConnector
             Dim cd As New SqlCommand(SQL, cn)
             Dim dr As SqlDataReader = cd.ExecuteReader
 
-            'DataTableの変数宣言
-            Dim dt As New DataTable("dtStatus")
-
-            ' 列名を取得する
-            For Each column As DataColumn In dtStatus.Columns
-                Dim columnName As String = column.ColumnName
-                dt.Columns.Add(columnName)
-            Next
-
             While dr.Read
                 Dim dtRow As DataRow
-                dtRow = dt.NewRow
-                dtRow("id") = dr("id")
-                dtRow("ステータス") = dr("status")
-                dtRow("表示順") = dr("display_number")
-                dtRow("コメント") = dr("comment")
-                dt.Rows.Add(dtRow)
+                dtRow = dtStatus.NewRow
+                For Each column As DataColumn In dtStatus.Columns
+                    Dim columnName As String = column.ColumnName
+                    dtRow(columnName) = dr(columnName)
+                Next
+                dtStatus.Rows.Add(dtRow)
             End While
-            dtStatus = dt
 
         Catch ex As Exception
             systemErrorFlag = True
