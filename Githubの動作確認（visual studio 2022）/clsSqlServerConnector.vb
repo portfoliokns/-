@@ -381,6 +381,7 @@ Public Class clsSqlServerConnector
             SQL = ""
             SQL &= String.Format("SELECT * ")
             SQL &= String.Format("FROM StatusMaster ")
+            SQL &= String.Format("ORDER BY display_number ASC ")
 
             Dim cd As New SqlCommand(SQL, cn)
             Dim dr As SqlDataReader = cd.ExecuteReader
