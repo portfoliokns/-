@@ -7,19 +7,9 @@
     Private Sub frmMaster_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Dim systemErrorFlag As String = False
 
-        Dim dtStatus As New DataTable("dtStatus")
-        dtStatus.Columns.Add("id")
-        dtStatus.Columns.Add("status")
-        dtStatus.Columns.Add("display_number")
-        dtStatus.Columns.Add("comment")
-
         Try
-            'データ取得
-            Dim status As New clsStatus
-            If status.getStatus(systemErrorFlag, dtStatus) Then Exit Try
-
-            'デザイン設定
-            If Me.setDesign(systemErrorFlag, dtStatus) Then Exit Try
+            '表示データを設定
+            If Me.setDataGridView(systemErrorFlag) Then Exit Try
 
         Catch ex As Exception
             MessageBox.Show("エラーが発生しました： " & ex.Message)
@@ -77,8 +67,11 @@
 
             'データ登録
             Dim status As New clsStatus
-            status.setStatus(systemErrorFlag, dtStatus)
+            If status.setStatus(systemErrorFlag, dtStatus) Then Exit Try
+            MessageBox.Show("保存が完了しました")
 
+            '表示データを設定
+            If Me.setDataGridView(systemErrorFlag) Then Exit Try
 
         Catch ex As Exception
             MessageBox.Show("エラーが発生しました： " & ex.Message)
@@ -95,6 +88,33 @@
     Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
         Me.Close()
     End Sub
+
+
+    Private Function setDataGridView(ByRef systemErrorFlag As Boolean) As Boolean
+        Dim dtStatus As New DataTable("dtStatus")
+        dtStatus.Columns.Add("id")
+        dtStatus.Columns.Add("status")
+        dtStatus.Columns.Add("display_number")
+        dtStatus.Columns.Add("comment")
+
+        Try
+            'データ取得
+            Dim status As New clsStatus
+            If status.getStatus(systemErrorFlag, dtStatus) Then Exit Try
+
+            'デザイン設定
+            If Me.setDesign(systemErrorFlag, dtStatus) Then Exit Try
+
+        Catch ex As Exception
+            systemErrorFlag = True
+            MessageBox.Show("エラーが発生しました： " & ex.Message)
+        Finally
+        End Try
+
+        Return systemErrorFlag
+    End Function
+
+
 
     ''' <summary>
     ''' デザインを設定する
@@ -118,10 +138,10 @@
             dgvStatus.Columns("changed_flag").Width = 0
 
             '操作不可
-            'dgvStatus.Columns("id").Visible = False
-            'dgvStatus.Columns("changed_flag").Visible = False
-            'dgvStatus.Columns("id").ReadOnly = True
-            'dgvStatus.Columns("changed_flag").ReadOnly = True
+            dgvStatus.Columns("id").Visible = False
+            dgvStatus.Columns("changed_flag").Visible = False
+            dgvStatus.Columns("id").ReadOnly = True
+            dgvStatus.Columns("changed_flag").ReadOnly = True
 
             '表示テキスト
             dgvStatus.Columns("status").HeaderText = "ステータス"

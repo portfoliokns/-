@@ -1,4 +1,8 @@
-﻿Imports System.Data.SqlClient
+﻿Imports System.Collections.ObjectModel
+Imports System.Data.Common
+Imports System.Data.SqlClient
+Imports System.Net
+Imports System.Text
 
 ''' <summary>
 ''' SQLServer接続基盤
@@ -407,41 +411,60 @@ Public Class clsSqlServerConnector
 
 
     Public Function insertStatus(ByRef systemErrorFlag As Boolean, ByRef dtStatus As DataTable) As Boolean
-        'Dim cn As New SqlClient.SqlConnection
-        'Dim SQL As String = ""
-        'Dim maxID As Integer
+        Dim cn As New SqlClient.SqlConnection
+        Dim SQL As String = ""
+        Dim transaction As SqlTransaction = Nothing
 
         Try
 
-            'If getConnection(systemErrorFlag, connectionString) Then Exit Try
-            'cn.ConnectionString = connectionString
-            'cn.Open()
+            If getConnection(systemErrorFlag, connectionString) Then Exit Try
+            cn.ConnectionString = connectionString
+            cn.Open()
 
-            'SQL = ""
-            'SQL &= String.Format("SELECT MAX(id) AS maxID ")
-            'SQL &= String.Format("FROM UserInfo; ")
 
-            'Dim cdSelect As New SqlCommand(SQL, cn)
-            'Dim dr As SqlDataReader = cdSelect.ExecuteReader
-            'While dr.Read
-            '    maxID = dr("maxID")
-            'End While
-            'cn.Close()
+            Dim maxId As Integer
+            Dim maxIDSQL As String = "SELECT MAX(id) FROM StatusMaster"
+            Dim getMaxID As New SqlCommand(maxIDSQL, cn)
+            Dim result As Object = getMaxID.ExecuteScalar()
+            If IsDBNull(result) Then
+                maxId = 0
+            Else
+                maxId = CInt(result)
+            End If
 
-            'cn.Open()
-            'SQL = ""
-            'SQL &= String.Format("INSERT INTO UserInfo (id, user_id, password,revoke_count, revoke_flag, admin_flag) ")
-            'SQL &= String.Format("VALUES (@id, @userID, @password, 0, 'False', @admin_flag); ")
+            transaction = cn.BeginTransaction()
 
-            'Dim cdInsert As New SqlCommand(SQL, cn)
-            'cdInsert.Parameters.AddWithValue("@id", maxID + 1)
-            ''cdInsert.Parameters.AddWithValue("@userID", userID)
-            ''cdInsert.Parameters.AddWithValue("@password", password)
-            ''cdInsert.Parameters.AddWithValue("@admin_flag", adminFlag)
-            'cdInsert.ExecuteNonQuery()
+            SQL = ""
+            SQL &= "DELETE FROM StatusMaster WHERE id = @id; "
+            SQL &= "INSERT INTO StatusMaster (id, status, display_number, comment) "
+            SQL &= "VALUES (@id, @status, @display_number, @comment); "
+
+            Dim cd As New SqlCommand(SQL, cn, transaction)
+            cd.Parameters.Add("@id", SqlDbType.Int)
+            cd.Parameters.Add("@status", SqlDbType.VarChar)
+            cd.Parameters.Add("@display_number", SqlDbType.Int)
+            cd.Parameters.Add("@comment", SqlDbType.VarChar)
+
+            For Each row As DataRow In dtStatus.Rows
+                If row("id") Is DBNull.Value Then
+                    ' idがNullの場合は最大値+1を入力
+                    maxId += 1
+                    cd.Parameters("@id").Value = maxId
+                Else
+                    cd.Parameters("@id").Value = row("id")
+                End If
+
+                cd.Parameters("@status").Value = row("status")
+                cd.Parameters("@display_number").Value = row("display_number")
+                cd.Parameters("@comment").Value = row("comment")
+                cd.ExecuteNonQuery()
+            Next
+
+            transaction.Commit()
 
         Catch ex As Exception
             systemErrorFlag = True
+            transaction.Rollback()
             MessageBox.Show("エラーが発生しました： " & ex.Message)
         Finally
             cn.Close()
