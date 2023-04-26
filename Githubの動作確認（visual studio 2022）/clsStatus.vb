@@ -1,6 +1,6 @@
 ﻿Public Class clsStatus
     ''' <summary>
-    ''' 状況情報を取得する
+    ''' ステータスを取得する
     ''' </summary>
     ''' <param name="systemErrorFlag"></param>
     ''' <param name="userID"></param>
@@ -28,11 +28,15 @@
         Return systemErrorFlag
     End Function
 
-
+    ''' <summary>
+    ''' ステータスを設定する
+    ''' </summary>
+    ''' <param name="systemErrorFlag">システムエラーフラグ</param>
+    ''' <param name="dtStatus">ステータステーブル</param>
+    ''' <returns>システムエラーフラグ</returns>
     Public Function setStatus(ByRef systemErrorFlag As Boolean, ByRef dtStatus As DataTable) As Boolean
 
         Try
-
             'SQL接続
             Dim sqlServerConnector As New clsSqlServerConnector
             If sqlServerConnector.insertStatus(systemErrorFlag, dtStatus) Then Exit Try

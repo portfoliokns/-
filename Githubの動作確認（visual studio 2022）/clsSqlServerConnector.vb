@@ -366,7 +366,7 @@ Public Class clsSqlServerConnector
 
 
     ''' <summary>
-    ''' 状況マスタを取得する
+    ''' ステータスマスタを取得する
     ''' </summary>
     ''' <param name="systemErrorFlag">システムエラーフラグ</param>
     ''' <param name="userID">ユーザーID</param>
@@ -409,7 +409,12 @@ Public Class clsSqlServerConnector
         Return systemErrorFlag
     End Function
 
-
+    ''' <summary>
+    ''' ステータスマスタを挿入する
+    ''' </summary>
+    ''' <param name="systemErrorFlag">システムエラーフラグ</param>
+    ''' <param name="dtStatus">ステータステーブル</param>
+    ''' <returns>システムエラーフラグ</returns>
     Public Function insertStatus(ByRef systemErrorFlag As Boolean, ByRef dtStatus As DataTable) As Boolean
         Dim cn As New SqlClient.SqlConnection
         Dim SQL As String = ""
@@ -447,7 +452,6 @@ Public Class clsSqlServerConnector
 
             For Each row As DataRow In dtStatus.Rows
                 If row("id") Is DBNull.Value Then
-                    ' idがNullの場合は最大値+1を入力
                     maxId += 1
                     cd.Parameters("@id").Value = maxId
                 Else

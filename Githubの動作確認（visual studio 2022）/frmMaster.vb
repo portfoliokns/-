@@ -30,7 +30,7 @@
             'ユーザーが行を編集していない場合、処理を終える
             If e.RowIndex = -1 Then Exit Try
 
-            '■フラグを設定
+            'フラグを設定
             Dim rowIndex As Integer = e.RowIndex
             If dgvStatus.Rows(rowIndex).Cells("changed_flag").Value Is DBNull.Value Then
                 dgvStatus.Rows(rowIndex).Cells("changed_flag").Value = True
@@ -70,7 +70,7 @@
             If status.setStatus(systemErrorFlag, dtStatus) Then Exit Try
             MessageBox.Show("保存が完了しました")
 
-            '表示データを設定
+            '表示データを再設定
             If Me.setDataGridView(systemErrorFlag) Then Exit Try
 
         Catch ex As Exception
@@ -89,7 +89,11 @@
         Me.Close()
     End Sub
 
-
+    ''' <summary>
+    ''' データテーブルをDataGridViewへ反映する
+    ''' </summary>
+    ''' <param name="systemErrorFlag"></param>
+    ''' <returns></returns>
     Private Function setDataGridView(ByRef systemErrorFlag As Boolean) As Boolean
         Dim dtStatus As New DataTable("dtStatus")
         dtStatus.Columns.Add("id")
@@ -114,8 +118,6 @@
         Return systemErrorFlag
     End Function
 
-
-
     ''' <summary>
     ''' デザインを設定する
     ''' </summary>
@@ -128,7 +130,6 @@
             'データテーブル設定
             dgvStatus.DataSource = dtStatus
 
-            '■デザイン設定
             '列幅設定
             dgvStatus.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells)
             dgvStatus.Columns("id").Width = 0
