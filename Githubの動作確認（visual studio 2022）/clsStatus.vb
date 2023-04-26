@@ -1,4 +1,6 @@
 ﻿Public Class clsStatus
+    Dim rowState As New clsRowState
+
     ''' <summary>
     ''' ステータスを取得する
     ''' </summary>
@@ -7,6 +9,11 @@
     ''' <param name="userExist"></param>
     ''' <returns></returns>
     Public Function getStatus(ByRef systemErrorFlag As Boolean, ByRef dtStatus As DataTable) As Boolean
+        dtStatus.Columns.Add("id")
+        dtStatus.Columns.Add("status")
+        dtStatus.Columns.Add("display_number")
+        dtStatus.Columns.Add("comment")
+        dtStatus.Columns.Add("delete_flag")
 
         Try
             'SQL接続
@@ -14,9 +21,9 @@
             If sqlServerConnector.getStatusMaster(systemErrorFlag, dtStatus) Then Exit Try
 
             '列追加
-            dtStatus.Columns.Add("changed_flag")
+            dtStatus.Columns.Add("status_flag")
             For Each row As DataRow In dtStatus.Rows
-                row("changed_flag") = False
+                row("status_flag") = rowState.NoChanged
             Next
 
         Catch ex As Exception

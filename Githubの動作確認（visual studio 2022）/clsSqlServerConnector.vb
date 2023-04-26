@@ -385,6 +385,7 @@ Public Class clsSqlServerConnector
             SQL = ""
             SQL &= String.Format("SELECT * ")
             SQL &= String.Format("FROM StatusMaster ")
+            SQL &= String.Format("WHERE delete_flag = 'FALSE' ")
             SQL &= String.Format("ORDER BY display_number ASC ")
 
             Dim cd As New SqlCommand(SQL, cn)
@@ -441,14 +442,15 @@ Public Class clsSqlServerConnector
 
             SQL = ""
             SQL &= "DELETE FROM StatusMaster WHERE id = @id; "
-            SQL &= "INSERT INTO StatusMaster (id, status, display_number, comment) "
-            SQL &= "VALUES (@id, @status, @display_number, @comment); "
+            SQL &= "INSERT INTO StatusMaster (id, status, display_number, comment, delete_flag) "
+            SQL &= "VALUES (@id, @status, @display_number, @comment, @delete_flag); "
 
             Dim cd As New SqlCommand(SQL, cn, transaction)
             cd.Parameters.Add("@id", SqlDbType.Int)
             cd.Parameters.Add("@status", SqlDbType.VarChar)
             cd.Parameters.Add("@display_number", SqlDbType.Int)
             cd.Parameters.Add("@comment", SqlDbType.VarChar)
+            cd.Parameters.Add("@delete_flag", SqlDbType.Bit)
 
             For Each row As DataRow In dtStatus.Rows
                 If row("id") Is DBNull.Value Then
@@ -461,6 +463,7 @@ Public Class clsSqlServerConnector
                 cd.Parameters("@status").Value = row("status")
                 cd.Parameters("@display_number").Value = row("display_number")
                 cd.Parameters("@comment").Value = row("comment")
+                cd.Parameters("@delete_flag").Value = row("delete_flag")
                 cd.ExecuteNonQuery()
             Next
 
