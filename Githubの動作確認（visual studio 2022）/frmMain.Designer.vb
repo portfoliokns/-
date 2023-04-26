@@ -24,6 +24,7 @@ Partial Class frmMain
     Private Sub InitializeComponent()
         btnAddAccount = New Button()
         btnLogout = New Button()
+        btnAddMaster = New Button()
         SuspendLayout()
         ' 
         ' btnAddAccount
@@ -32,7 +33,7 @@ Partial Class frmMain
         btnAddAccount.Location = New Point(187, 12)
         btnAddAccount.Name = "btnAddAccount"
         btnAddAccount.Size = New Size(87, 23)
-        btnAddAccount.TabIndex = 0
+        btnAddAccount.TabIndex = 1
         btnAddAccount.Text = "アカウント登録"
         btnAddAccount.UseVisualStyleBackColor = True
         btnAddAccount.Visible = False
@@ -42,17 +43,30 @@ Partial Class frmMain
         btnLogout.Location = New Point(280, 12)
         btnLogout.Name = "btnLogout"
         btnLogout.Size = New Size(87, 23)
-        btnLogout.TabIndex = 1
+        btnLogout.TabIndex = 2
         btnLogout.Text = "ログアウト"
         btnLogout.UseVisualStyleBackColor = True
+        ' 
+        ' btnAddMaster
+        ' 
+        btnAddMaster.Enabled = False
+        btnAddMaster.Location = New Point(94, 12)
+        btnAddMaster.Name = "btnAddMaster"
+        btnAddMaster.Size = New Size(87, 23)
+        btnAddMaster.TabIndex = 0
+        btnAddMaster.Text = "マスタ登録"
+        btnAddMaster.UseVisualStyleBackColor = True
+        btnAddMaster.Visible = False
         ' 
         ' frmMain
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(377, 450)
+        Controls.Add(btnAddMaster)
         Controls.Add(btnLogout)
         Controls.Add(btnAddAccount)
+        FormBorderStyle = FormBorderStyle.FixedSingle
         Name = "frmMain"
         Text = "ログイン成功"
         ResumeLayout(False)
@@ -60,4 +74,5 @@ Partial Class frmMain
 
     Friend WithEvents btnAddAccount As Button
     Friend WithEvents btnLogout As Button
+    Friend WithEvents btnAddMaster As Button
 End Class

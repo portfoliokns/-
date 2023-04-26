@@ -1,4 +1,8 @@
-﻿Imports System.Data.SqlClient
+﻿Imports System.Collections.ObjectModel
+Imports System.Data.Common
+Imports System.Data.SqlClient
+Imports System.Net
+Imports System.Text
 
 ''' <summary>
 ''' SQLServer接続基盤
@@ -360,4 +364,117 @@ Public Class clsSqlServerConnector
         Return systemErrorFlag
     End Function
 
+
+    ''' <summary>
+    ''' ステータスマスタを取得する
+    ''' </summary>
+    ''' <param name="systemErrorFlag">システムエラーフラグ</param>
+    ''' <param name="userID">ユーザーID</param>
+    ''' <param name="isAdmin">権限結果</param>
+    ''' <returns>システムエラーフラグ</returns>
+    Public Function getStatusMaster(ByRef systemErrorFlag As Boolean, ByRef dtStatus As DataTable) As Boolean
+        Dim cn As New SqlClient.SqlConnection
+        Dim SQL As String = ""
+
+        Try
+
+            If getConnection(systemErrorFlag, connectionString) Then Exit Try
+            cn.ConnectionString = connectionString
+            cn.Open()
+
+            SQL = ""
+            SQL &= String.Format("SELECT * ")
+            SQL &= String.Format("FROM StatusMaster ")
+            SQL &= String.Format("ORDER BY display_number ASC ")
+
+            Dim cd As New SqlCommand(SQL, cn)
+            Dim dr As SqlDataReader = cd.ExecuteReader
+
+            While dr.Read
+                Dim dtRow As DataRow
+                dtRow = dtStatus.NewRow
+                For Each column As DataColumn In dtStatus.Columns
+                    Dim columnName As String = column.ColumnName
+                    dtRow(columnName) = dr(columnName)
+                Next
+                dtStatus.Rows.Add(dtRow)
+            End While
+
+        Catch ex As Exception
+            systemErrorFlag = True
+            MessageBox.Show("エラーが発生しました： " & ex.Message)
+        Finally
+        End Try
+
+        Return systemErrorFlag
+    End Function
+
+    ''' <summary>
+    ''' ステータスマスタを挿入する
+    ''' </summary>
+    ''' <param name="systemErrorFlag">システムエラーフラグ</param>
+    ''' <param name="dtStatus">ステータステーブル</param>
+    ''' <returns>システムエラーフラグ</returns>
+    Public Function insertStatus(ByRef systemErrorFlag As Boolean, ByRef dtStatus As DataTable) As Boolean
+        Dim cn As New SqlClient.SqlConnection
+        Dim SQL As String = ""
+        Dim transaction As SqlTransaction = Nothing
+
+        Try
+
+            If getConnection(systemErrorFlag, connectionString) Then Exit Try
+            cn.ConnectionString = connectionString
+            cn.Open()
+
+
+            Dim maxId As Integer
+            Dim maxIDSQL As String = "SELECT MAX(id) FROM StatusMaster"
+            Dim getMaxID As New SqlCommand(maxIDSQL, cn)
+            Dim result As Object = getMaxID.ExecuteScalar()
+            If IsDBNull(result) Then
+                maxId = 0
+            Else
+                maxId = CInt(result)
+            End If
+
+            transaction = cn.BeginTransaction()
+
+            SQL = ""
+            SQL &= "DELETE FROM StatusMaster WHERE id = @id; "
+            SQL &= "INSERT INTO StatusMaster (id, status, display_number, comment) "
+            SQL &= "VALUES (@id, @status, @display_number, @comment); "
+
+            Dim cd As New SqlCommand(SQL, cn, transaction)
+            cd.Parameters.Add("@id", SqlDbType.Int)
+            cd.Parameters.Add("@status", SqlDbType.VarChar)
+            cd.Parameters.Add("@display_number", SqlDbType.Int)
+            cd.Parameters.Add("@comment", SqlDbType.VarChar)
+
+            For Each row As DataRow In dtStatus.Rows
+                If row("id") Is DBNull.Value Then
+                    maxId += 1
+                    cd.Parameters("@id").Value = maxId
+                Else
+                    cd.Parameters("@id").Value = row("id")
+                End If
+
+                cd.Parameters("@status").Value = row("status")
+                cd.Parameters("@display_number").Value = row("display_number")
+                cd.Parameters("@comment").Value = row("comment")
+                cd.ExecuteNonQuery()
+            Next
+
+            transaction.Commit()
+
+        Catch ex As Exception
+            systemErrorFlag = True
+            transaction.Rollback()
+            MessageBox.Show("エラーが発生しました： " & ex.Message)
+        Finally
+            cn.Close()
+            cn.Dispose()
+        End Try
+
+        Return systemErrorFlag
+    End Function
 End Class

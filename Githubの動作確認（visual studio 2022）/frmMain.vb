@@ -22,10 +22,14 @@
             If userInfo.checkAddmin(systemErrorFlag, _userID, isAdmin) Then Exit Try
 
             If isAdmin Then
+                btnAddMaster.Enabled = True
                 btnAddAccount.Enabled = True
+                btnAddMaster.Visible = True
                 btnAddAccount.Visible = True
             Else
+                btnAddMaster.Enabled = False
                 btnAddAccount.Enabled = False
+                btnAddMaster.Visible = False
                 btnAddAccount.Visible = False
             End If
 
@@ -33,6 +37,16 @@
             MessageBox.Show("エラーが発生しました： " & ex.Message)
         Finally
         End Try
+    End Sub
+
+    ''' <summary>
+    ''' マスタ登録ボタン、クリック時の処理
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub btnAddMaster_Click(sender As Object, e As EventArgs) Handles btnAddMaster.Click
+        Dim AddMaster As New frmMaster
+        AddMaster.Show()
     End Sub
 
     ''' <summary>

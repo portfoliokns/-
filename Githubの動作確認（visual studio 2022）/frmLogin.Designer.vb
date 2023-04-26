@@ -105,6 +105,7 @@ Partial Class frmLogin
         Controls.Add(txtUserID)
         Controls.Add(lblPassword)
         Controls.Add(lblUserID)
+        FormBorderStyle = FormBorderStyle.FixedSingle
         Name = "frmLogin"
         Text = "ログイン"
         ResumeLayout(False)
