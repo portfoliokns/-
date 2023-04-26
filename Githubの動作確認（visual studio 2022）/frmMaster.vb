@@ -11,6 +11,9 @@
             '表示データを設定
             If Me.setDataGridView(systemErrorFlag) Then Exit Try
 
+            '右クリック時のメニュー追加
+            If Me.setClickMenus(systemErrorFlag) Then Exit Try
+
         Catch ex As Exception
             MessageBox.Show("エラーが発生しました： " & ex.Message)
         Finally
@@ -108,6 +111,30 @@
 
             'デザイン設定
             If Me.setDesign(systemErrorFlag, dtStatus) Then Exit Try
+
+        Catch ex As Exception
+            systemErrorFlag = True
+            MessageBox.Show("エラーが発生しました： " & ex.Message)
+        Finally
+        End Try
+
+        Return systemErrorFlag
+    End Function
+
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="systemErrorFlag"></param>
+    ''' <returns></returns>
+    Private Function setClickMenus(ByRef systemErrorFlag As Boolean) As Boolean
+
+        Try
+            Dim contextMenu As New ContextMenuStrip
+            dgvStatus.ContextMenuStrip = contextMenu
+
+            Dim menuItem As New ToolStripMenuItem
+            menuItem.Text = "削除"
+            contextMenu.Items.Add(menuItem)
 
         Catch ex As Exception
             systemErrorFlag = True
