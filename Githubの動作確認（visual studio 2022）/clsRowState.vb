@@ -1,8 +1,11 @@
-﻿Public Class clsRowState
+﻿''' <summary>
+''' DataGridViewの状態管理クラス
+''' </summary>
+Public Class clsRowState
     Private Enum _Status
-        NoChanged = 0
-        Edit = 1
-        Update = 2
+        NoChanged
+        Edit
+        Update
     End Enum
 
     Public ReadOnly Property NoChanged() As String

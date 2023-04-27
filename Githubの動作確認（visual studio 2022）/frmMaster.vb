@@ -89,13 +89,17 @@
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Private Sub tsmiDelete_Click(sender As Object, e As EventArgs) Handles tsmiDelete.Click
-        Dim selectedRowIndex As Integer = dgvStatus.SelectedCells(0).RowIndex
-        If selectedRowIndex >= 0 AndAlso selectedRowIndex < dgvStatus.Rows.Count Then
-            dgvStatus.Rows(selectedRowIndex).ReadOnly = True
-            dgvStatus.Rows(selectedRowIndex).Cells("delete_flag").Value = rowState.Delete
-            dgvStatus.Rows(selectedRowIndex).DefaultCellStyle.BackColor = Color.LightGray
-            dgvStatus.Rows(selectedRowIndex).Selected = False
-        End If
+        Dim systemErrorFlag As String = False
+
+        Try
+            '行の状態を変更
+            If Me.changeRowState(systemErrorFlag, True, rowState.Delete, Color.LightGray) Then Exit Try
+
+        Catch ex As Exception
+            MessageBox.Show("エラーが発生しました： " & ex.Message)
+        Finally
+        End Try
+
     End Sub
 
     ''' <summary>
@@ -104,13 +108,17 @@
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Private Sub tsmiRestore_Click(sender As Object, e As EventArgs) Handles tsmiRestore.Click
-        Dim selectedRowIndex As Integer = dgvStatus.SelectedCells(0).RowIndex
-        If selectedRowIndex >= 0 AndAlso selectedRowIndex < dgvStatus.Rows.Count Then
-            dgvStatus.Rows(selectedRowIndex).ReadOnly = False
-            dgvStatus.Rows(selectedRowIndex).Cells("delete_flag").Value = rowState.NotDelete
-            dgvStatus.Rows(selectedRowIndex).DefaultCellStyle.BackColor = Color.White
-            dgvStatus.Rows(selectedRowIndex).Selected = False
-        End If
+        Dim systemErrorFlag As String = False
+
+        Try
+            '行の状態を変更
+            If Me.changeRowState(systemErrorFlag, False, rowState.NotDelete, Color.White) Then Exit Try
+
+        Catch ex As Exception
+            MessageBox.Show("エラーが発生しました： " & ex.Message)
+        Finally
+        End Try
+
     End Sub
 
     ''' <summary>
@@ -292,6 +300,32 @@
                     Exit Try
                 End If
             Next
+
+        Catch ex As Exception
+            systemErrorFlag = True
+            MessageBox.Show("エラーが発生しました： " & ex.Message)
+        Finally
+        End Try
+
+        Return systemErrorFlag
+    End Function
+
+    ''' <summary>
+    ''' 行の状態を変更する
+    ''' </summary>
+    ''' <param name="systemErrorFlag">システムエラーフラグ</param>
+    ''' <param name="read">ReadOnly状態：Boolean型</param>
+    ''' <param name="delete_flag">delete_flagの状態</param>
+    ''' <param name="color">色の指定</param>
+    ''' <returns></returns>
+    Private Function changeRowState(ByRef systemErrorFlag As Boolean, ByRef read As Boolean, ByRef delete_flag As Boolean, ByRef color As Color) As Boolean
+
+        Try
+            Dim selectedRowIndex As Integer = dgvStatus.SelectedCells(0).RowIndex
+            dgvStatus.Rows(selectedRowIndex).ReadOnly = read
+            dgvStatus.Rows(selectedRowIndex).Cells("delete_flag").Value = delete_flag
+            dgvStatus.Rows(selectedRowIndex).DefaultCellStyle.BackColor = color
+            dgvStatus.Rows(selectedRowIndex).Selected = False
 
         Catch ex As Exception
             systemErrorFlag = True
