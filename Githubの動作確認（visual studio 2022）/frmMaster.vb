@@ -1,4 +1,6 @@
 ﻿Public Class frmMaster
+    Dim rowState As New clsRowState
+
     ''' <summary>
     ''' フォームの初期化
     ''' </summary>
@@ -30,14 +32,87 @@
             'ユーザーが行を編集していない場合、処理を終える
             If e.RowIndex = -1 Then Exit Try
 
-            'フラグを設定
+            '■フラグを設定
             Dim rowIndex As Integer = e.RowIndex
-            If dgvStatus.Rows(rowIndex).Cells("changed_flag").Value Is DBNull.Value Then
-                dgvStatus.Rows(rowIndex).Cells("changed_flag").Value = True
+            '新規行の場合、アップデートフラグに設定する
+            If dgvStatus.Rows(rowIndex).Cells("status_flag").Value Is DBNull.Value Then
+                dgvStatus.Rows(rowIndex).Cells("status_flag").Value = rowState.Update
+                dgvStatus.Rows(rowIndex).Cells("delete_flag").Value = rowState.NotDelete
             End If
-            If Convert.ToBoolean(dgvStatus.Rows(rowIndex).Cells("changed_flag").Value) = False Then
-                dgvStatus.Rows(rowIndex).Cells("changed_flag").Value = True
+            '既存行の場合、編集フラグにする
+            If dgvStatus.Rows(rowIndex).Cells("status_flag").Value = rowState.NoChanged Then
+                dgvStatus.Rows(rowIndex).Cells("status_flag").Value = rowState.Edit
             End If
+
+        Catch ex As Exception
+            MessageBox.Show("エラーが発生しました： " & ex.Message)
+        Finally
+        End Try
+
+    End Sub
+
+    ''' <summary>
+    ''' 右クリック時の処理
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub dgvStatus_CellMouseClick(sender As Object, e As DataGridViewCellMouseEventArgs) Handles dgvStatus.CellMouseClick
+        If (e.Button = MouseButtons.Right) AndAlso (e.ColumnIndex >= 0 And e.RowIndex >= 0) Then
+            dgvStatus.ClearSelection()
+            dgvStatus.Rows(e.RowIndex).Selected = True
+
+            '新規追加行の場合、コンテキストメニューを表示しない
+            Dim lastRowIndex As Integer = dgvStatus.Rows.Count - 1
+            If lastRowIndex = e.RowIndex Then
+                tsmiDelete.Enabled = False
+                tsmiRestore.Enabled = False
+                Exit Sub
+            End If
+
+            'コンテキストメニューの表示制御
+            Dim deleteStatus As Boolean = dgvStatus.Rows(e.RowIndex).Cells("delete_flag").Value
+            If deleteStatus Then
+                tsmiDelete.Enabled = False
+                tsmiRestore.Enabled = True
+            Else
+                tsmiDelete.Enabled = True
+                tsmiRestore.Enabled = False
+            End If
+            ctmClickMenu.Show(System.Windows.Forms.Cursor.Position)
+
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' 削除メニューを選択した時の処理
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub tsmiDelete_Click(sender As Object, e As EventArgs) Handles tsmiDelete.Click
+        Dim systemErrorFlag As String = False
+
+        Try
+            '行の状態を変更
+            If Me.changeRowState(systemErrorFlag, True, rowState.Delete, Color.LightGray) Then Exit Try
+
+        Catch ex As Exception
+            MessageBox.Show("エラーが発生しました： " & ex.Message)
+        Finally
+        End Try
+
+    End Sub
+
+    ''' <summary>
+    ''' 復元メニューを選択した時の処理
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub tsmiRestore_Click(sender As Object, e As EventArgs) Handles tsmiRestore.Click
+        Dim systemErrorFlag As String = False
+
+        Try
+            '行の状態を変更
+            If Me.changeRowState(systemErrorFlag, False, rowState.NotDelete, Color.White) Then Exit Try
 
         Catch ex As Exception
             MessageBox.Show("エラーが発生しました： " & ex.Message)
@@ -92,14 +167,10 @@
     ''' <summary>
     ''' データテーブルをDataGridViewへ反映する
     ''' </summary>
-    ''' <param name="systemErrorFlag"></param>
-    ''' <returns></returns>
+    ''' <param name="systemErrorFlag">システムエラーフラグ</param>
+    ''' <returns>システムエラーフラグ</returns>
     Private Function setDataGridView(ByRef systemErrorFlag As Boolean) As Boolean
         Dim dtStatus As New DataTable("dtStatus")
-        dtStatus.Columns.Add("id")
-        dtStatus.Columns.Add("status")
-        dtStatus.Columns.Add("display_number")
-        dtStatus.Columns.Add("comment")
 
         Try
             'データ取得
@@ -136,13 +207,17 @@
             dgvStatus.Columns("status").Width = 100
             dgvStatus.Columns("display_number").Width = 80
             dgvStatus.Columns("comment").Width = 350
-            dgvStatus.Columns("changed_flag").Width = 0
+            dgvStatus.Columns("delete_flag").Width = 350
+            dgvStatus.Columns("status_flag").Width = 0
+            dgvStatus.Columns("delete_flag").Width = 0
 
             '操作不可
             dgvStatus.Columns("id").Visible = False
-            dgvStatus.Columns("changed_flag").Visible = False
+            dgvStatus.Columns("status_flag").Visible = False
+            dgvStatus.Columns("delete_flag").Visible = False
             dgvStatus.Columns("id").ReadOnly = True
-            dgvStatus.Columns("changed_flag").ReadOnly = True
+            dgvStatus.Columns("status_flag").ReadOnly = True
+            dgvStatus.Columns("delete_flag").ReadOnly = True
 
             '表示テキスト
             dgvStatus.Columns("status").HeaderText = "ステータス"
@@ -174,8 +249,11 @@
 
             '行を設定
             For Each row As DataGridViewRow In dgvStatus.Rows
-                '入力していない行は、テーブルに設定しない
-                If row.Cells("changed_flag").Value = False Then Continue For
+                '入力していない行、新規行はチェックしない
+                If row.Cells("status_flag").Value = rowState.NoChanged Then Continue For
+                If row.Cells("status_flag").Value = rowState.Update _
+                    And row.Cells("delete_flag").Value = rowState.Delete Then Continue For
+                If row.Cells("status_flag").Value = Nothing Then Continue For
 
                 Dim dataRow As DataRow = dtStatus.NewRow()
                 For Each cell As DataGridViewCell In row.Cells
@@ -203,9 +281,10 @@
 
         Try
             For Each row As DataGridViewRow In dgvStatus.Rows
-
-                '入力していない行は、チェックしない
-                If row.Cells("changed_flag").Value = False Then Continue For
+                '入力していない行、削除する行、新規行はチェックしない
+                If row.Cells("status_flag").Value = rowState.NoChanged Then Continue For
+                If row.Cells("delete_flag").Value = rowState.Delete Then Continue For
+                If row.Cells("status_flag").Value = Nothing Then Continue For
 
                 'ステータス
                 If row.Cells("status").Value Is DBNull.Value Then
@@ -221,6 +300,32 @@
                     Exit Try
                 End If
             Next
+
+        Catch ex As Exception
+            systemErrorFlag = True
+            MessageBox.Show("エラーが発生しました： " & ex.Message)
+        Finally
+        End Try
+
+        Return systemErrorFlag
+    End Function
+
+    ''' <summary>
+    ''' 行の状態を変更する
+    ''' </summary>
+    ''' <param name="systemErrorFlag">システムエラーフラグ</param>
+    ''' <param name="read">ReadOnly状態：Boolean型</param>
+    ''' <param name="delete_flag">delete_flagの状態</param>
+    ''' <param name="color">色の指定</param>
+    ''' <returns></returns>
+    Private Function changeRowState(ByRef systemErrorFlag As Boolean, ByRef read As Boolean, ByRef delete_flag As Boolean, ByRef color As Color) As Boolean
+
+        Try
+            Dim selectedRowIndex As Integer = dgvStatus.SelectedCells(0).RowIndex
+            dgvStatus.Rows(selectedRowIndex).ReadOnly = read
+            dgvStatus.Rows(selectedRowIndex).Cells("delete_flag").Value = delete_flag
+            dgvStatus.Rows(selectedRowIndex).DefaultCellStyle.BackColor = color
+            dgvStatus.Rows(selectedRowIndex).Selected = False
 
         Catch ex As Exception
             systemErrorFlag = True

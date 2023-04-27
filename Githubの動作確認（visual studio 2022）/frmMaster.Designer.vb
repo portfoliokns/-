@@ -22,10 +22,15 @@ Partial Class frmMaster
     'コード エディターを使って変更しないでください。
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        components = New ComponentModel.Container()
         btnClose = New Button()
         btnSave = New Button()
         dgvStatus = New DataGridView()
+        ctmClickMenu = New ContextMenuStrip(components)
+        tsmiDelete = New ToolStripMenuItem()
+        tsmiRestore = New ToolStripMenuItem()
         CType(dgvStatus, ComponentModel.ISupportInitialize).BeginInit()
+        ctmClickMenu.SuspendLayout()
         SuspendLayout()
         ' 
         ' btnClose
@@ -55,6 +60,24 @@ Partial Class frmMaster
         dgvStatus.Size = New Size(580, 150)
         dgvStatus.TabIndex = 12
         ' 
+        ' ctmClickMenu
+        ' 
+        ctmClickMenu.Items.AddRange(New ToolStripItem() {tsmiDelete, tsmiRestore})
+        ctmClickMenu.Name = "ctmClickMenu"
+        ctmClickMenu.Size = New Size(99, 48)
+        ' 
+        ' tsmiDelete
+        ' 
+        tsmiDelete.Name = "tsmiDelete"
+        tsmiDelete.Size = New Size(98, 22)
+        tsmiDelete.Text = "削除"
+        ' 
+        ' tsmiRestore
+        ' 
+        tsmiRestore.Name = "tsmiRestore"
+        tsmiRestore.Size = New Size(98, 22)
+        tsmiRestore.Text = "復元"
+        ' 
         ' frmMaster
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
@@ -67,10 +90,14 @@ Partial Class frmMaster
         Name = "frmMaster"
         Text = "マスタ登録"
         CType(dgvStatus, ComponentModel.ISupportInitialize).EndInit()
+        ctmClickMenu.ResumeLayout(False)
         ResumeLayout(False)
     End Sub
 
     Friend WithEvents btnClose As Button
     Friend WithEvents btnSave As Button
     Friend WithEvents dgvStatus As DataGridView
+    Friend WithEvents ctmClickMenu As ContextMenuStrip
+    Friend WithEvents tsmiDelete As ToolStripMenuItem
+    Friend WithEvents tsmiRestore As ToolStripMenuItem
 End Class
