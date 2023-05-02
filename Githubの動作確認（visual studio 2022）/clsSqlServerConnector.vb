@@ -427,7 +427,6 @@ Public Class clsSqlServerConnector
             cn.ConnectionString = connectionString
             cn.Open()
 
-
             Dim maxId As Integer
             Dim maxIDSQL As String = "SELECT MAX(id) FROM StatusMaster"
             Dim getMaxID As New SqlCommand(maxIDSQL, cn)
@@ -482,7 +481,7 @@ Public Class clsSqlServerConnector
     End Function
 
     ''' <summary>
-    ''' ステータスマスタを取得する
+    ''' 機器・端末の情報を取得する
     ''' </summary>
     ''' <param name="systemErrorFlag">システムエラーフラグ</param>
     ''' <param name="userID">ユーザーID</param>
@@ -520,6 +519,79 @@ Public Class clsSqlServerConnector
             systemErrorFlag = True
             MessageBox.Show("エラーが発生しました： " & ex.Message)
         Finally
+        End Try
+
+        Return systemErrorFlag
+    End Function
+
+
+    ''' <summary>
+    ''' 機器・端末の情報を挿入する
+    ''' </summary>
+    ''' <param name="systemErrorFlag">システムエラーフラグ</param>
+    ''' <param name="dtDevice">機器・端末テーブル</param>
+    ''' <returns>システムエラーフラグ</returns>
+    Public Function insertDevice(ByRef systemErrorFlag As Boolean, ByRef dtDevice As DataTable) As Boolean
+        Dim cn As New SqlClient.SqlConnection
+        Dim SQL As String = ""
+        Dim transaction As SqlTransaction = Nothing
+
+        Try
+
+            If getConnection(systemErrorFlag, connectionString) Then Exit Try
+            cn.ConnectionString = connectionString
+            cn.Open()
+
+            Dim maxId As Integer
+            Dim maxIDSQL As String = "SELECT MAX(id) FROM DeviceInfo"
+            Dim getMaxID As New SqlCommand(maxIDSQL, cn)
+            Dim result As Object = getMaxID.ExecuteScalar()
+            If IsDBNull(result) Then
+                maxId = 0
+            Else
+                maxId = CInt(result)
+            End If
+
+            transaction = cn.BeginTransaction()
+
+            SQL = ""
+            SQL &= "DELETE FROM DeviceInfo WHERE id = @id; "
+            SQL &= "INSERT INTO DeviceInfo (id, status, admin, device, appendix, delete_flag) "
+            SQL &= "VALUES (@id, @status, @admin, @device, @appendix, @delete_flag); "
+
+            Dim cd As New SqlCommand(SQL, cn, transaction)
+            cd.Parameters.Add("@id", SqlDbType.Int)
+            cd.Parameters.Add("@status", SqlDbType.Int)
+            cd.Parameters.Add("@admin", SqlDbType.VarChar)
+            cd.Parameters.Add("@device", SqlDbType.VarChar)
+            cd.Parameters.Add("@appendix", SqlDbType.VarChar)
+            cd.Parameters.Add("@delete_flag", SqlDbType.Bit)
+
+            For Each row As DataRow In dtDevice.Rows
+                If row("id") Is DBNull.Value Then
+                    maxId += 1
+                    cd.Parameters("@id").Value = maxId
+                Else
+                    cd.Parameters("@id").Value = row("id")
+                End If
+
+                cd.Parameters("@status").Value = row("status")
+                cd.Parameters("@admin").Value = row("admin")
+                cd.Parameters("@device").Value = row("device")
+                cd.Parameters("@appendix").Value = row("appendix")
+                cd.Parameters("@delete_flag").Value = row("delete_flag")
+                cd.ExecuteNonQuery()
+            Next
+
+            transaction.Commit()
+
+        Catch ex As Exception
+            systemErrorFlag = True
+            transaction.Rollback()
+            MessageBox.Show("エラーが発生しました： " & ex.Message)
+        Finally
+            cn.Close()
+            cn.Dispose()
         End Try
 
         Return systemErrorFlag

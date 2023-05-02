@@ -182,7 +182,7 @@
         Dim systemErrorFlag As String = False
         Dim checkErrorFlag As String = False
 
-        Dim dtStatus As New DataTable("dtStatus")
+        Dim dtDevice As New DataTable("dtDevice")
 
         Try
             '空欄チェック
@@ -190,11 +190,11 @@
             If checkErrorFlag Then Exit Try
 
             'データテーブルを設定
-            'If Me.setDataTable(systemErrorFlag, dtStatus) Then Exit Try
+            If Me.SetDataTable(systemErrorFlag, dtDevice) Then Exit Try
 
             'データ登録
             Dim device As New clsDevice
-            'If device.setDevice(systemErrorFlag, dtStatus) Then Exit Try
+            If device.setDevice(systemErrorFlag, dtDevice) Then Exit Try
             MessageBox.Show("保存が完了しました")
 
             '表示データを再設定
@@ -338,6 +338,44 @@
             dgvDevice.Rows(selectedRowIndex).Cells("delete_flag").Value = delete_flag
             dgvDevice.Rows(selectedRowIndex).DefaultCellStyle.BackColor = color
             dgvDevice.Rows(selectedRowIndex).Selected = False
+
+        Catch ex As Exception
+            systemErrorFlag = True
+            MessageBox.Show("エラーが発生しました： " & ex.Message)
+        Finally
+        End Try
+
+        Return systemErrorFlag
+    End Function
+
+    ''' <summary>
+    ''' データテーブルに設定する
+    ''' </summary>
+    ''' <param name="systemErrorFlag">システムエラーフラグ</param>
+    ''' <param name="dtDevice">ステータステーブル</param>
+    ''' <returns>システムエラーフラグ</returns>
+    Private Function SetDataTable(ByRef systemErrorFlag As Boolean, ByRef dtDevice As DataTable) As Boolean
+
+        Try
+            '列を設定
+            For Each col As DataGridViewColumn In dgvDevice.Columns
+                dtDevice.Columns.Add(col.Name, col.ValueType)
+            Next
+
+            '行を設定
+            For Each row As DataGridViewRow In dgvDevice.Rows
+                '入力していない行、新規行はチェックしない
+                If row.Cells("status_flag").Value = rowState.NoChanged Then Continue For
+                If row.Cells("status_flag").Value = rowState.Update _
+                    And row.Cells("delete_flag").Value = rowState.Delete Then Continue For
+                If row.Cells("status_flag").Value = Nothing Then Continue For
+
+                Dim dataRow As DataRow = dtDevice.NewRow()
+                For Each cell As DataGridViewCell In row.Cells
+                    dataRow(cell.ColumnIndex) = cell.Value
+                Next
+                dtDevice.Rows.Add(dataRow)
+            Next
 
         Catch ex As Exception
             systemErrorFlag = True

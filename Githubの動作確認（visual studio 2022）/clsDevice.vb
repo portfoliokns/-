@@ -47,7 +47,7 @@
         Try
             'SQL接続
             Dim sqlServerConnector As New clsSqlServerConnector
-            'If sqlServerConnector.insertStatus(systemErrorFlag, dtDevice) Then Exit Try
+            If sqlServerConnector.insertDevice(systemErrorFlag, dtDevice) Then Exit Try
 
         Catch ex As Exception
             systemErrorFlag = True
