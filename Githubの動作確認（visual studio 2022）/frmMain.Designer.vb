@@ -22,12 +22,17 @@ Partial Class frmMain
     'コード エディターを使って変更しないでください。
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        components = New ComponentModel.Container()
         btnAddAccount = New Button()
         btnLogout = New Button()
         btnAddMaster = New Button()
         dgvDevice = New DataGridView()
         btnSave = New Button()
+        ctmClickMenu = New ContextMenuStrip(components)
+        tsmiDelete = New ToolStripMenuItem()
+        tsmiRestore = New ToolStripMenuItem()
         CType(dgvDevice, ComponentModel.ISupportInitialize).BeginInit()
+        ctmClickMenu.SuspendLayout()
         SuspendLayout()
         ' 
         ' btnAddAccount
@@ -79,6 +84,24 @@ Partial Class frmMain
         btnSave.Text = "登録"
         btnSave.UseVisualStyleBackColor = True
         ' 
+        ' ctmClickMenu
+        ' 
+        ctmClickMenu.Items.AddRange(New ToolStripItem() {tsmiDelete, tsmiRestore})
+        ctmClickMenu.Name = "ctmClickMenu"
+        ctmClickMenu.Size = New Size(181, 70)
+        ' 
+        ' tsmiDelete
+        ' 
+        tsmiDelete.Name = "tsmiDelete"
+        tsmiDelete.Size = New Size(180, 22)
+        tsmiDelete.Text = "削除"
+        ' 
+        ' tsmiRestore
+        ' 
+        tsmiRestore.Name = "tsmiRestore"
+        tsmiRestore.Size = New Size(180, 22)
+        tsmiRestore.Text = "復元"
+        ' 
         ' frmMain
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
@@ -93,6 +116,7 @@ Partial Class frmMain
         Name = "frmMain"
         Text = "管理画面"
         CType(dgvDevice, ComponentModel.ISupportInitialize).EndInit()
+        ctmClickMenu.ResumeLayout(False)
         ResumeLayout(False)
     End Sub
 
@@ -101,4 +125,7 @@ Partial Class frmMain
     Friend WithEvents btnAddMaster As Button
     Friend WithEvents dgvDevice As DataGridView
     Friend WithEvents btnSave As Button
+    Friend WithEvents ctmClickMenu As ContextMenuStrip
+    Friend WithEvents tsmiDelete As ToolStripMenuItem
+    Friend WithEvents tsmiRestore As ToolStripMenuItem
 End Class
