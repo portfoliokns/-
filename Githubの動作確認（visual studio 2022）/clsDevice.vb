@@ -13,6 +13,7 @@
         dtDevice.Columns.Add("status")
         dtDevice.Columns.Add("admin")
         dtDevice.Columns.Add("device")
+        dtDevice.Columns.Add("appendix")
         dtDevice.Columns.Add("delete_flag")
 
         Try
@@ -20,11 +21,11 @@
             Dim sqlServerConnector As New clsSqlServerConnector
             If sqlServerConnector.getDeviceInfo(systemErrorFlag, dtDevice) Then Exit Try
 
-            ''列追加
-            'dtDevice.Columns.Add("status_flag")
-            'For Each row As DataRow In dtDevice.Rows
-            '    row("status_flag") = rowState.NoChanged
-            'Next
+            '列追加
+            dtDevice.Columns.Add("status_flag")
+            For Each row As DataRow In dtDevice.Rows
+                row("status_flag") = rowState.NoChanged
+            Next
 
         Catch ex As Exception
             systemErrorFlag = True

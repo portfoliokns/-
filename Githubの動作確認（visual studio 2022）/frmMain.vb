@@ -17,7 +17,7 @@
         Dim isAdmin As Boolean
 
         Try
-            '権限
+            '権限制御
             Dim userInfo As New clsUserInfo
             If userInfo.checkAddmin(systemErrorFlag, _userID, isAdmin) Then Exit Try
 
@@ -117,36 +117,37 @@
     ''' デザインを設定する
     ''' </summary>
     ''' <param name="systemErrorFlag">システムエラーフラグ</param>
-    ''' <param name="dtStatus">ステータステーブル</param>
+    ''' <param name="dtDevice">機器・端末テーブル</param>
     ''' <returns>システムエラーフラグ</returns>
-    Private Function setDesign(ByRef systemErrorFlag As Boolean, ByRef dtStatus As DataTable) As Boolean
+    Private Function setDesign(ByRef systemErrorFlag As Boolean, ByRef dtDevice As DataTable) As Boolean
 
         Try
-            ''データテーブル設定
-            'dgvStatus.DataSource = dtStatus
+            'データテーブル設定
+            dgvDevice.DataSource = dtDevice
 
-            ''列幅設定
-            'dgvStatus.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells)
-            'dgvStatus.Columns("id").Width = 0
-            'dgvStatus.Columns("status").Width = 100
-            'dgvStatus.Columns("display_number").Width = 80
-            'dgvStatus.Columns("comment").Width = 350
-            'dgvStatus.Columns("delete_flag").Width = 350
-            'dgvStatus.Columns("status_flag").Width = 0
-            'dgvStatus.Columns("delete_flag").Width = 0
+            '列幅設定
+            dgvDevice.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells)
+            dgvDevice.Columns("id").Width = 0
+            dgvDevice.Columns("status").Width = 100
+            dgvDevice.Columns("admin").Width = 120
+            dgvDevice.Columns("device").Width = 120
+            dgvDevice.Columns("appendix").Width = 250
+            dgvDevice.Columns("delete_flag").Width = 0
+            dgvDevice.Columns("status_flag").Width = 0
 
-            ''操作不可
-            'dgvStatus.Columns("id").Visible = False
-            'dgvStatus.Columns("status_flag").Visible = False
-            'dgvStatus.Columns("delete_flag").Visible = False
-            'dgvStatus.Columns("id").ReadOnly = True
-            'dgvStatus.Columns("status_flag").ReadOnly = True
-            'dgvStatus.Columns("delete_flag").ReadOnly = True
+            '操作不可
+            dgvDevice.Columns("id").Visible = False
+            dgvDevice.Columns("delete_flag").Visible = False
+            dgvDevice.Columns("status_flag").Visible = False
+            dgvDevice.Columns("id").ReadOnly = True
+            dgvDevice.Columns("delete_flag").ReadOnly = True
+            dgvDevice.Columns("status_flag").ReadOnly = True
 
-            ''表示テキスト
-            'dgvStatus.Columns("status").HeaderText = "ステータス"
-            'dgvStatus.Columns("display_number").HeaderText = "表示順"
-            'dgvStatus.Columns("comment").HeaderText = "コメント"
+            '表示テキスト
+            dgvDevice.Columns("status").HeaderText = "ステータス"
+            dgvDevice.Columns("admin").HeaderText = "管理者・使用者"
+            dgvDevice.Columns("device").HeaderText = "機器・端末情報"
+            dgvDevice.Columns("appendix").HeaderText = "補足事項"
 
         Catch ex As Exception
             systemErrorFlag = True

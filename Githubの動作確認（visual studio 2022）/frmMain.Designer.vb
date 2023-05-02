@@ -25,13 +25,9 @@ Partial Class frmMain
         btnAddAccount = New Button()
         btnLogout = New Button()
         btnAddMaster = New Button()
-        dgvMain = New DataGridView()
-        no = New DataGridViewTextBoxColumn()
-        status = New DataGridViewTextBoxColumn()
-        admin = New DataGridViewTextBoxColumn()
-        device = New DataGridViewTextBoxColumn()
+        dgvDevice = New DataGridView()
         btnSave = New Button()
-        CType(dgvMain, ComponentModel.ISupportInitialize).BeginInit()
+        CType(dgvDevice, ComponentModel.ISupportInitialize).BeginInit()
         SuspendLayout()
         ' 
         ' btnAddAccount
@@ -65,40 +61,14 @@ Partial Class frmMain
         btnAddMaster.UseVisualStyleBackColor = True
         btnAddMaster.Visible = False
         ' 
-        ' dgvMain
+        ' dgvDevice
         ' 
-        dgvMain.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        dgvMain.Columns.AddRange(New DataGridViewColumn() {no, status, admin, device})
-        dgvMain.Location = New Point(12, 41)
-        dgvMain.Name = "dgvMain"
-        dgvMain.RowTemplate.Height = 25
-        dgvMain.Size = New Size(711, 359)
-        dgvMain.TabIndex = 3
-        ' 
-        ' no
-        ' 
-        no.Frozen = True
-        no.HeaderText = "No."
-        no.Name = "no"
-        no.ReadOnly = True
-        no.Width = 60
-        ' 
-        ' status
-        ' 
-        status.HeaderText = "ステータス"
-        status.Name = "status"
-        ' 
-        ' admin
-        ' 
-        admin.HeaderText = "管理者・使用者"
-        admin.Name = "admin"
-        admin.Width = 140
-        ' 
-        ' device
-        ' 
-        device.HeaderText = "機器・端末情報"
-        device.Name = "device"
-        device.Width = 350
+        dgvDevice.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        dgvDevice.Location = New Point(12, 41)
+        dgvDevice.Name = "dgvDevice"
+        dgvDevice.RowTemplate.Height = 25
+        dgvDevice.Size = New Size(711, 359)
+        dgvDevice.TabIndex = 3
         ' 
         ' btnSave
         ' 
@@ -115,24 +85,20 @@ Partial Class frmMain
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(735, 450)
         Controls.Add(btnSave)
-        Controls.Add(dgvMain)
+        Controls.Add(dgvDevice)
         Controls.Add(btnAddMaster)
         Controls.Add(btnLogout)
         Controls.Add(btnAddAccount)
         FormBorderStyle = FormBorderStyle.FixedSingle
         Name = "frmMain"
         Text = "管理画面"
-        CType(dgvMain, ComponentModel.ISupportInitialize).EndInit()
+        CType(dgvDevice, ComponentModel.ISupportInitialize).EndInit()
         ResumeLayout(False)
     End Sub
 
     Friend WithEvents btnAddAccount As Button
     Friend WithEvents btnLogout As Button
     Friend WithEvents btnAddMaster As Button
-    Friend WithEvents dgvMain As DataGridView
+    Friend WithEvents dgvDevice As DataGridView
     Friend WithEvents btnSave As Button
-    Friend WithEvents no As DataGridViewTextBoxColumn
-    Friend WithEvents status As DataGridViewTextBoxColumn
-    Friend WithEvents admin As DataGridViewTextBoxColumn
-    Friend WithEvents device As DataGridViewTextBoxColumn
 End Class
