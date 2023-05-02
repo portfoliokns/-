@@ -480,4 +480,48 @@ Public Class clsSqlServerConnector
 
         Return systemErrorFlag
     End Function
+
+    ''' <summary>
+    ''' ステータスマスタを取得する
+    ''' </summary>
+    ''' <param name="systemErrorFlag">システムエラーフラグ</param>
+    ''' <param name="userID">ユーザーID</param>
+    ''' <param name="isAdmin">権限結果</param>
+    ''' <returns>システムエラーフラグ</returns>
+    Public Function getDeviceInfo(ByRef systemErrorFlag As Boolean, ByRef dtDevice As DataTable) As Boolean
+        Dim cn As New SqlClient.SqlConnection
+        Dim SQL As String = ""
+
+        Try
+
+            If getConnection(systemErrorFlag, connectionString) Then Exit Try
+            cn.ConnectionString = connectionString
+            cn.Open()
+
+            SQL = ""
+            SQL &= String.Format("SELECT * ")
+            SQL &= String.Format("FROM DeviceInfo ")
+            SQL &= String.Format("WHERE delete_flag = 'FALSE' ")
+
+            Dim cd As New SqlCommand(SQL, cn)
+            Dim dr As SqlDataReader = cd.ExecuteReader
+
+            While dr.Read
+                Dim dtRow As DataRow
+                dtRow = dtDevice.NewRow
+                For Each column As DataColumn In dtDevice.Columns
+                    Dim columnName As String = column.ColumnName
+                    dtRow(columnName) = dr(columnName)
+                Next
+                dtDevice.Rows.Add(dtRow)
+            End While
+
+        Catch ex As Exception
+            systemErrorFlag = True
+            MessageBox.Show("エラーが発生しました： " & ex.Message)
+        Finally
+        End Try
+
+        Return systemErrorFlag
+    End Function
 End Class

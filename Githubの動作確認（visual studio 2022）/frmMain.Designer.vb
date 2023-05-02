@@ -26,11 +26,11 @@ Partial Class frmMain
         btnLogout = New Button()
         btnAddMaster = New Button()
         dgvMain = New DataGridView()
-        btnAdd = New Button()
         no = New DataGridViewTextBoxColumn()
         status = New DataGridViewTextBoxColumn()
         admin = New DataGridViewTextBoxColumn()
         device = New DataGridViewTextBoxColumn()
+        btnSave = New Button()
         CType(dgvMain, ComponentModel.ISupportInitialize).BeginInit()
         SuspendLayout()
         ' 
@@ -75,15 +75,6 @@ Partial Class frmMain
         dgvMain.Size = New Size(711, 359)
         dgvMain.TabIndex = 3
         ' 
-        ' btnAdd
-        ' 
-        btnAdd.Location = New Point(635, 415)
-        btnAdd.Name = "btnAdd"
-        btnAdd.Size = New Size(76, 23)
-        btnAdd.TabIndex = 9
-        btnAdd.Text = "登録"
-        btnAdd.UseVisualStyleBackColor = True
-        ' 
         ' no
         ' 
         no.Frozen = True
@@ -107,14 +98,23 @@ Partial Class frmMain
         ' 
         device.HeaderText = "機器・端末情報"
         device.Name = "device"
-        device.Width = 240
+        device.Width = 350
+        ' 
+        ' btnSave
+        ' 
+        btnSave.Location = New Point(635, 415)
+        btnSave.Name = "btnSave"
+        btnSave.Size = New Size(76, 23)
+        btnSave.TabIndex = 9
+        btnSave.Text = "登録"
+        btnSave.UseVisualStyleBackColor = True
         ' 
         ' frmMain
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(735, 450)
-        Controls.Add(btnAdd)
+        Controls.Add(btnSave)
         Controls.Add(dgvMain)
         Controls.Add(btnAddMaster)
         Controls.Add(btnLogout)
@@ -130,7 +130,7 @@ Partial Class frmMain
     Friend WithEvents btnLogout As Button
     Friend WithEvents btnAddMaster As Button
     Friend WithEvents dgvMain As DataGridView
-    Friend WithEvents btnAdd As Button
+    Friend WithEvents btnSave As Button
     Friend WithEvents no As DataGridViewTextBoxColumn
     Friend WithEvents status As DataGridViewTextBoxColumn
     Friend WithEvents admin As DataGridViewTextBoxColumn
